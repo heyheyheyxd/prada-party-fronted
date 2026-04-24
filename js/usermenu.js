@@ -29,7 +29,7 @@ function userMenu() {
                 this.first_name = user.first_name || "";
                 this.avatar = user.avatar
                 ? `https://prada-party.onrender.com/api/files/users/${user.id}/${user.avatar}`
-                : "../img/people.jpg";
+                : "img/people.jpg";
 
                 //  Если есть имя — показываем имя, иначе email
                 this.displayName = this.first_name !== ""
