@@ -11,7 +11,7 @@ function catalogPage() {
         priceMax: 200000,
 
         async loadAll() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const records = await pb.collection("products").getFullList();
 
@@ -152,10 +152,10 @@ function catalogPage() {
                 brand: item.brand,
                 price: item.price,
                 category: item.category,
-                image: `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`,
+                image: `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
                 image2: item.image2
-                    ? `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image2}`
-                    : `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`
+                    ? `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image2}`
+                    : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`
             };
         }
     }

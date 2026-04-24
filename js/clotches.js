@@ -10,7 +10,7 @@ function clothesPage() {
         sortBy: "",
 
         async loadClothes() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const records = await pb.collection("products").getFullList({
                 filter: 'category = "clothes"'
@@ -133,10 +133,10 @@ function clothesPage() {
                 title: item.title,
                 brand: item.brand,
                 price: item.price,
-                image: `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`,
+                image: `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
                 image2: item.image2
-                    ? `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image2}`
-                    : `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`,
+                    ? `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image2}`
+                    : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
                 link: `product.html?id=${item.id}`
             };
         }

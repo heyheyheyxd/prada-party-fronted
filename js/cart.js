@@ -5,7 +5,7 @@ function cartPage() {
         loading: true,
 
         async loadCart() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
             const user = pb.authStore.model;
 
             let localCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -114,7 +114,7 @@ function cartPage() {
         },
 
         async increaseQty(index) {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             this.items[index].quantity++;
 
@@ -126,7 +126,7 @@ function cartPage() {
         },
 
         async decreaseQty(index) {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (this.items[index].quantity > 1) {
                 this.items[index].quantity--;
@@ -140,7 +140,7 @@ function cartPage() {
         },
 
         async removeItem(index) {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             await pb.collection("cart").delete(this.items[index].cartRecordId);
 
@@ -149,7 +149,7 @@ function cartPage() {
         },
 
         async clearCart() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             for (const item of this.items) {
                 await pb.collection("cart").delete(item.cartRecordId);
@@ -160,7 +160,7 @@ function cartPage() {
         },
 
         async loadRecommended() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             try {
                 const products = await pb.collection("products").getFullList({

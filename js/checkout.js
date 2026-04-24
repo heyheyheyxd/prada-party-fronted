@@ -50,7 +50,7 @@ function checkoutPage() {
         async init() {
             this.items = JSON.parse(localStorage.getItem("checkoutItems") || "[]");
 
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 this.loading = false;
@@ -201,7 +201,7 @@ function checkoutPage() {
         },
 
         async clearFullCart() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 localStorage.removeItem("cart");
@@ -230,7 +230,7 @@ function checkoutPage() {
         async placeOrder() {
             if (!this.canOrder()) return;
 
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             let lastOrderNumber = 0;
 

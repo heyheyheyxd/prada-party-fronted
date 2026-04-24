@@ -27,7 +27,7 @@ async function loadPopularProducts() {
     const container = document.getElementById("popular-products");
     if (!container) return;
 
-    const pb = new PocketBase("http://127.0.0.1:8090");
+    const pb = new PocketBase("https://prada-party.onrender.com");
 
     // 1. Получаем все популярные товары в наличии
     const products = await pb.collection("products").getFullList({

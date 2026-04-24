@@ -26,7 +26,7 @@ function wishlistPage() {
         },
 
         async loadWishlist() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 this.items = [];
@@ -125,7 +125,7 @@ function wishlistPage() {
         },
 
         async loadSimilar() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (this.items.length === 0) {
                 this.similar = [];
@@ -167,7 +167,7 @@ function wishlistPage() {
         },
 
         async removeItem(index) {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const recordId = this.items[index].wishlistRecordId;
 
@@ -187,7 +187,7 @@ function wishlistPage() {
         },
 
         async addToCart(index) {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 alert("Войдите в аккаунт");

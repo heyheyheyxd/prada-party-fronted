@@ -9,7 +9,7 @@ function userMenu() {
         wishlistCount: 0,
 
         async init() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
 
             this.isLoggedIn = pb.authStore.isValid;
 
@@ -28,7 +28,7 @@ function userMenu() {
                 this.email = user.email;
                 this.first_name = user.first_name || "";
                 this.avatar = user.avatar
-                ? `http://127.0.0.1:8090/api/files/users/${user.id}/${user.avatar}`
+                ? `https://prada-party.onrender.com/api/files/users/${user.id}/${user.avatar}`
                 : "../img/people.jpg";
 
                 //  Если есть имя — показываем имя, иначе email
@@ -56,7 +56,7 @@ function userMenu() {
 
         // СИНХРОНИЗАЦИЯ WISHLIST
         async syncWishlistFromPB() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) return;
 
@@ -83,7 +83,7 @@ function userMenu() {
 
         // СИНХРОНИЗАЦИЯ CART
         async syncCartFromPB() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) return;
 
@@ -121,7 +121,7 @@ function userMenu() {
         },
         // ВЫХОД
         logout() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
             localStorage.removeItem("wishlist");
             localStorage.removeItem("cart");
 
