@@ -71,7 +71,7 @@ function registerForm() {
                 return;
             }
 
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
 
             try {
                 await pb.collection('users').create({
