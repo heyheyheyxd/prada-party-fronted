@@ -1,6 +1,6 @@
 async function loadComponent(id, file) {
     try {
-        const response = await fetch(`../components/${file}`);
+        const response = await fetch(`/components/${file}`);
         const html = await response.text();
 
         const container = document.getElementById(id);
