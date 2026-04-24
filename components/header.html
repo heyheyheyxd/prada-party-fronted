@@ -1,0 +1,119 @@
+
+<header class="header" x-data="userMenu()" x-init="init()">
+
+<div class="header-left">
+    <nav class="nav">
+        <a href="/catalog.html">Каталог</a>
+        <a href="/clotches.html">Одежда</a>
+        <a href="/shoes.html">Обувь</a>
+        <a href="/accessories.html">Аксессуары</a>
+    </nav>
+</div>
+
+<div class="header-center">
+    <a href="/index.html" class="logo">Prada Party</a>
+</div>
+<div class="search-box">
+    <input type="text" placeholder="Что вы хотите найти?" id="globalSearchInput">
+    <span class="search-icon">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="#555" stroke-width="2"/>
+        <line x1="16" y1="16" x2="22" y2="22" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+</span>
+
+</div>
+<div class="header-right">
+    <!-- профиль -->
+</div>
+
+
+<div class="header-right">
+
+    <!-- До входа -->
+    <template x-if="!isLoggedIn">
+        <div>
+            <a href="/login.html" class="login-btn">Войти</a>
+            <a href="/register.html" class="register-btn">Регистрация</a>
+        </div>
+    </template>
+
+    <!-- После входа -->
+    <template x-if="isLoggedIn">
+        <div class="user-and-icons">
+
+            <!-- Профиль -->
+            <a href="/profile.html" class="user-menu">
+                <img :src="avatar" alt="user" class="user-icon">
+                <span class="user-name" x-text="displayName"></span>
+            </a>
+
+            <!-- Избранное -->
+            <a href="/wishlist.html" class="icon-btn wishlist-btn" title="Избранное">
+                <svg class="icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="counter" x-show="wishlistCount > 0" x-text="wishlistCount"></span>
+            </a>
+
+            <!-- Корзина -->
+            <a href="/cart.html" class="icon-btn cart-btn" title="Корзина">
+                <svg class="icon-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"/>
+                    <circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="counter" x-show="cartCount > 0" x-text="cartCount"></span>
+            </a>
+
+        </div>
+    </template>
+
+</div>
+
+
+</header>
+
+<script>
+function headerData() {
+    return {
+        isLoggedIn: false,
+        email: "",
+        first_name: "",
+        displayName: "",
+        cartCount: 0,
+        wishlistCount: 0,
+
+        init() {
+            const pb = new PocketBase("http://127.0.0.1:8090");
+
+            if (pb.authStore.isValid) {
+                const user = pb.authStore.model;
+                this.isLoggedIn = true;
+                this.email = user.email;
+                this.first_name = user.first_name || "";
+                this.displayName = this.first_name || this.email.split('@')[0];
+            }
+
+            this.updateCounts();
+
+            // Слушаем ВСЕ изменения
+            window.addEventListener('storage', () => this.updateCounts());
+            window.addEventListener('cart-updated', () => this.updateCounts());
+            window.addEventListener('wishlist-updated', () => this.updateCounts());
+        },
+
+        updateCounts() {
+            // Корзина — считаем сумму количеств, а не просто length
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            this.cartCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+
+            // Избранное
+            const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+            this.wishlistCount = wishlist.length;
+            
+        }
+
+    }
+}
+</script>

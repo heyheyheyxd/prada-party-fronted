@@ -1,0 +1,329 @@
+/* Основной контейнер */
+.wishlist-main {
+    padding: 10px 0;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Заголовок */
+.wishlist-title {
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* Пустое состояние */
+.wishlist-empty {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.empty-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.empty-subtitle {
+    font-size: 17px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.wishlist-empty-link {
+    color: #000;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+/* Сетка товаров — 4 в строке */
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+/* Карточка */
+.wishlist-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Фото */
+.wishlist-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    margin-bottom: 15px;
+}
+
+.img-main {
+    width: 100%;
+    transition: opacity .35s ease;
+    display: block;
+}
+
+.img-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transition: opacity .35s ease;
+}
+
+.wishlist-image:hover .img-main {
+    opacity: 0;
+}
+
+.wishlist-image:hover .img-hover {
+    opacity: 1;
+}
+
+/* Текстовый блок */
+.wishlist-text-block {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Фиксируем высоту каждого элемента */
+.brand {
+    font-size: 20px;
+    color: #111;
+    margin-bottom: 6px;
+    min-height: 20px; /* 1 строка */
+}
+
+.title {
+    font-size: 18px;
+    margin-bottom: 8px;
+    min-height: 48px; /* 2 строки */
+    line-height: 1.2;
+    color: #666;
+}
+
+.price {
+    font-size: 19px;
+    font-weight: 600;
+    min-height: 24px; /* 1 строка */
+    
+}
+
+/* Кнопки — всегда внизу */
+.add-to-cart {
+    width: 100%;
+    padding: 14px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: opacity .2s ease;
+    margin-top: auto; /* ← фиксирует кнопки внизу */
+}
+
+.add-to-cart:hover {
+    opacity: 0.75;
+}
+
+.remove {
+    width: 100%;
+    padding: 14px;
+    background: #f2f2f2;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 10px;
+    transition: background .2s ease;
+}
+
+.remove:hover {
+    background: #e4e4e4;
+}
+.size {
+    font-size: 18px;
+    color: #1f1d1d;
+    margin-bottom: 10px;
+}
+/* Затемнение карточки */
+.wishlist-card.out-of-stock {
+    opacity: 0.55;
+    position: relative;
+}
+
+/* Бейдж как в корзине */
+.stock-warning {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #111;
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 3;
+}
+
+/* Кнопка "Добавить в корзину" — серый стиль при отсутствии */
+.add-to-cart:disabled {
+    background: #d9d9d9 !important;
+    color: #777 !important;
+    border-color: #d9d9d9 !important;
+    cursor: not-allowed;
+}
+
+/* Убираем opacity, оно ломает кнопку удалить */
+.wishlist-card.out-of-stock {
+    position: relative;
+}
+
+/* Добавляем оверлей поверх карточки */
+.wishlist-card.out-of-stock::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.55); /* то же визуально, но НЕ влияет на кнопки */
+    border-radius: 14px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Бейдж поверх оверлея */
+.stock-warning {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #111;
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 3;
+}
+
+/* Кнопка добавить в корзину — блокируется */
+.add-to-cart:disabled {
+    background: #d9d9d9 !important;
+    color: #777 !important;
+    border-color: #d9d9d9 !important;
+    cursor: not-allowed;
+}
+
+/* Кнопка удалить — ВСЕГДА нормальная */
+.remove {
+    position: relative;
+    z-index: 4; /* поверх оверлея */
+}
+/* Контейнер тостов — по центру сверху */
+#toast-container {
+    position: fixed;
+    top: 30px; /* расстояние от верхнего края */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+}
+
+/* Сам тост */
+.toast {
+    background: #111;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity .25s ease, transform .25s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    pointer-events: auto;
+}
+
+/* Плавное появление */
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.recommend-block {
+    margin-top: 60px;
+}
+
+.recommend-title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.recommend-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.recommend-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.recommend-image {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    margin-bottom: 15px;
+}
+
+.recommend-image img {
+    width: 100%;
+    transition: opacity .35s ease;
+}
+
+.recommend-image .img-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.recommend-image:hover .img-main {
+    opacity: 0;
+}
+
+.recommend-image:hover .img-hover {
+    opacity: 1;
+}
+
+.recommend-brand {
+    font-size: 18px;
+    color: #111;
+    margin-bottom: 6px;
+}
+
+.recommend-name {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.recommend-price {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+
+

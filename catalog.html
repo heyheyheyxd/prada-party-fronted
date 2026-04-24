@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/catalog.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/catalog.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<section class="catalog-page"
+         x-data="catalogPage()"
+         x-init="loadAll(); initGlobalSearch();">
+
+    <p class="search-info" 
+       x-show="searchMessage" 
+       x-text="searchMessage"
+       style="margin-bottom: 20px; font-size: 20px; font-weight: 500;color: #111;text-align: center;">
+    </p>
+
+    <div class="catalog-filters">
+
+        <div class="filter-group">
+            <button @click="filterType = ''; applyFilters()" 
+                    :class="{active: filterType === ''}">Все</button>
+
+            <button @click="filterType = 'clothes'; applyFilters()" 
+                    :class="{active: filterType === 'clothes'}">Одежда</button>
+                    
+            <button @click="filterType = 'shoes'; applyFilters()" 
+                    :class="{active: filterType === 'shoes'}">Обувь</button>
+
+            <button @click="filterType = 'accessories'; applyFilters()" 
+                    :class="{active: filterType === 'accessories'}">Аксессуары</button>
+        </div>
+
+        <div class="price-filter">
+
+            <div class="price-inputs">
+                <div>
+                    <label>От</label>
+                    <input type="number" min="0" max="200000"
+                           x-model.number="priceMin"
+                           @input="applyFilters()">
+                </div>
+
+                <div>
+                    <label>До</label>
+                    <input type="number" min="0" max="200000"
+                           x-model.number="priceMax"
+                           @input="applyFilters()">
+                </div>
+            </div>
+
+            <div class="price-slider" x-ref="priceSlider">
+                <!-- серая полоса -->
+                <div class="price-slider-track"></div>
+
+                <!-- тёмная полоса между ползунками -->
+                <div class="price-slider-range" x-ref="priceRange"></div>
+
+                <!-- левый ползунок -->
+                <input type="range" min="0" max="200000" step="100"
+                       x-model.number="priceMin"
+                       @input="syncPriceRange('min')">
+
+                <!-- правый ползунок -->
+                <input type="range" min="0" max="200000" step="100"
+                       x-model.number="priceMax"
+                       @input="syncPriceRange('max')">
+            </div>
+
+        </div>
+        <div class="sort-group">
+            <select x-model="sortBy" @change="applyFilters()">
+                <option value="">Сортировка</option>
+                <option value="price_asc">Цена: по возрастанию</option>
+                <option value="price_desc">Цена: по убыванию</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="catalog-grid" x-show="!noResults">
+        <template x-for="item in items" :key="item.id">
+
+            <a :href="'product.html?id=' + item.id" class="catalog-card">
+
+                <div class="catalog-image">
+                    <img :src="item.image" class="img-main">
+                    <img :src="item.image2" class="img-hover">
+                </div>
+
+                <p class="catalog-brand" x-text="item.brand"></p>
+                <h3 class="catalog-name" x-text="item.title"></h3>
+                <p class="catalog-price" x-text="item.price + ' ₽'"></p>
+
+            </a>
+
+        </template>
+    </div>
+
+
+
+</section>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш заказ — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/orders.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="/js/orders.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/main.js" defer></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+
+<div id="toast-container"></div>
+<div id="header"></div>
+
+<main class="orders-main" x-data="ordersPage()" x-init="init()">
+
+    <section class="orders-container">
+
+        <h1>Заказ успешно оформлен</h1>
+
+        <p class="order-number">
+            Номер заказа: <span x-text="orderNumber"></span>
+        </p>
+
+        <p class="order-text">
+            Вы можете посмотреть детали заказа в личном кабинете.
+        </p>
+
+        <a href="profile.html#orders" class="to-profile">Перейти к заказам</a>
+
+        <h2>Товары в заказе</h2>
+
+        <div class="order-items">
+            <template x-for="item in items">
+                <div class="order-item">
+                    <img :src="item.image">
+                    <div>
+                        <p class="brand" x-text="item.brand"></p>
+                        <p class="title" x-text="item.title"></p>
+                        <p class="price" x-text="item.price + ' ₽'"></p>
+                        <p class="qty">Количество: <span x-text="item.quantity"></span></p>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

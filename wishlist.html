@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Избранное — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/wishlist.css">
+
+    <script src="https://unpkg.com/pocketbase@0.22.1/dist/pocketbase.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="/js/wishlist.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+<div id="toast-container"></div>
+
+<div id="header"></div>
+
+<main class="wishlist-main" x-data="wishlistPage()" x-init="loadWishlist()">
+
+    <section class="wishlist-page">
+
+        <h1 class="wishlist-title">Избранное</h1>
+        <!-- Сообщение о результатах поиска -->
+<p class="wishlist-search-info"
+   x-show="searchMessage"
+   x-text="searchMessage"
+   style="margin-bottom: 20px; font-size: 18px; font-weight: 500;">
+</p>
+
+<!-- Сообщение "ничего не найдено" -->
+<div class="wishlist-no-results"
+     x-show="noResults"
+     style="margin: 40px 0; text-align: center; font-size: 20px; color: #555;">
+    <p>К сожалению, по вашему запросу ничего не найдено.</p>
+</div>
+
+        <!-- Пустой список -->
+        <div class="wishlist-empty" x-show="!loading && items.length === 0">
+            <p class="empty-title">В избранном пока пусто.</p>
+            <p class="empty-subtitle">Добавляйте товары, чтобы быстро находить любимые позиции.</p>
+
+            <a href="catalog.html" class="wishlist-empty-link">Перейти в каталог</a>
+        </div>
+
+        <!-- Список избранного -->
+        <div class="wishlist-grid" x-show="!loading && items.length > 0">
+            <template x-for="(item, index) in items" :key="index">
+
+                <div class="wishlist-card" :class="{ 'out-of-stock': !item.in_stock }">
+
+                    <a :href="'product.html?id=' + item.id" class="wishlist-image">
+                        <img :src="item.image" class="img-main">
+                        <img :src="item.image2" class="img-hover">
+                    </a>
+
+                    <template x-if="!item.in_stock">
+                        <div class="stock-warning">Нет в наличии</div>
+                    </template>
+
+                    <div class="wishlist-text-block">
+                        <p class="brand" x-text="item.brand"></p>
+                        <p class="title" x-text="item.title"></p>
+                        <p class="price" x-text="item.price + ' ₽'"></p>
+                        <p class="size" x-show="item.size" x-text="'Размер: ' + item.size"></p>
+                    </div>
+
+                    <button 
+                        class="add-to-cart"
+                        @click="addToCart(index)"
+                        :disabled="!item.in_stock"
+                    >
+                        Добавить в корзину
+                    </button>
+
+                    <button class="remove" @click="removeItem(index)">Удалить</button>
+
+                </div>
+
+            </template>
+        </div>
+
+        <!--  Похожее для вас -->
+        <div class="recommend-block" x-show="similar.length > 0">
+            <h2 class="recommend-title">Похожее для вас</h2>
+
+            <div class="recommend-grid">
+                <template x-for="item in similar" :key="item.id">
+                    <a :href="'product.html?id=' + item.id" class="recommend-card">
+                        <div class="recommend-image">
+                            <img :src="item.image" class="img-main">
+                            <img :src="item.image2" class="img-hover">
+                        </div>
+
+                        <p class="recommend-brand" x-text="item.brand"></p>
+                        <p class="recommend-name" x-text="item.title"></p>
+                        <p class="recommend-price" x-text="item.price + ' ₽'"></p>
+                    </a>
+                </template>
+            </div>
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Оплата — Prada Party</title>
+
+    
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/payment.css">
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+
+    <script src="/js/usermenu.js" defer></script>
+    <script src="/js/main.js" defer></script>
+    <script src="/js/payment.js" defer></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main class="payment-page">
+
+    <div class="payment-layout">
+
+        <aside class="payment-sidebar">
+            <h3>Помощь</h3>
+            <ul>
+                <li><a href="delivery.html">Доставка</a></li>
+                <li><a href="returns.html">Возврат</a></li>
+                <li><a href="payment.html" class="active">Оплата</a></li>
+
+            </ul>
+        </aside>
+
+        <section class="payment-content">
+            <h1>Оплата</h1>
+
+            <p class="payment-intro">
+                Мы поддерживаем современные и безопасные способы оплаты, доступные на территории России.  
+                Все платежи проходят через сертифицированные российские платёжные сервисы и полностью соответствуют требованиям законодательства РФ.
+            </p>
+
+            
+            <div class="payment-item">
+                <button class="payment-header">
+                    Доступные способы оплаты
+                    <span class="payment-arrow">▼</span>
+                </button>
+                <div class="payment-content-box">
+                    <p><strong>Банковские карты российских банков:</strong></p>
+                    <ul>
+                        <li>Мир</li>
+                        <li>Visa / Mastercard российских банков (только внутри РФ)</li>
+                    </ul>
+
+                    <p><strong>Онлайн‑оплата:</strong></p>
+                    <ul>
+                        <li>СБП (Система Быстрых Платежей)</li>
+                        <li>ЮMoney</li>
+                        <li>Тинькофф Pay</li>
+                        <li>СберPay</li>
+                    </ul>
+
+                    <p><strong>Оплата при получении:</strong></p>
+                    <ul>
+                        <li>Наличными</li>
+                        <li>Банковской картой курьеру</li>
+                    </ul>
+
+                    <p><strong>Рассрочка:</strong></p>
+                    <ul>
+                        <li>Тинькофф</li>
+                        <li>Сбер</li>
+                        <li>Альфа‑Банк</li>
+                    </ul>
+                </div>
+            </div>
+
+            
+            <div class="payment-item">
+                <button class="payment-header">
+                    Безопасность платежей
+                    <span class="payment-arrow">▼</span>
+                </button>
+                <div class="payment-content-box">
+                    <p>Все платежи обрабатываются через российские платёжные шлюзы, соответствующие стандартам безопасности.</p>
+                    <p><strong>Мы используем:</strong></p>
+                    <ul>
+                        <li>Защищённый протокол SSL</li>
+                        <li>3‑D Secure для подтверждения операций</li>
+                        <li>Сертифицированные процессинговые центры</li>
+                    </ul>
+                    <p>Мы не храним данные ваших карт — они передаются только банку.</p>
+                </div>
+            </div>
+
+            
+            <div class="payment-item">
+                <button class="payment-header">
+                    Проблемы с оплатой
+                    <span class="payment-arrow">▼</span>
+                </button>
+                <div class="payment-content-box">
+                    <p><strong>Если платёж не проходит:</strong></p>
+                    <ul>
+                        <li>Проверьте, что карта не заблокирована</li>
+                        <li>Убедитесь, что включён 3‑D Secure</li>
+                        <li>Попробуйте оплату через СБП</li>
+                        <li>Попробуйте другой банк (Тинькофф / Сбер / ВТБ)</li>
+                    </ul>
+                    <p>Если проблема сохраняется — напишите в поддержку, мы поможем.</p>
+                </div>
+            </div>
+
+            
+            <div class="payment-item">
+                <button class="payment-header">
+                    Часто задаваемые вопросы
+                    <span class="payment-arrow">▼</span>
+                </button>
+                <div class="payment-content-box">
+                    <p><strong>Можно ли оплатить при получении?</strong><br>
+                    Да, доступна оплата наличными или картой курьеру.</p>
+
+                    <p><strong>Работают ли Apple Pay / Google Pay?</strong><br>
+                    На территории РФ они ограничены, но доступны альтернативы: СБП, СберPay, Тинькофф Pay.</p>
+
+                    <p><strong>Можно ли оплатить частями?</strong><br>
+                    Да, доступна рассрочка от российских банков.</p>
+
+                    <p><strong>Почему платёж отклонён?</strong><br>
+                    Часто причина — ограничения банка. Попробуйте СБП или другой способ оплаты.</p>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<div id="footer"></div>
+
+</body>
+</html>

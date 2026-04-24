@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title x-text="product.title || 'Товар'"></title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/product.css">
+
+    <script src="https://unpkg.com/pocketbase@0.22.1/dist/pocketbase.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="/js/product.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+<div id="toast-container"></div>
+
+<div id="header"></div>
+
+<main class="product-main">
+    <section class="product-page" x-data="productPage()" x-init="loadProduct()">
+
+        <!-- Ошибка -->
+        <div x-show="error" class="error-message">
+            <p x-text="error"></p>
+            <p>Попробуйте обновить страницу или войти в аккаунт</p>
+        </div>
+
+        <!-- Контент -->
+        <template x-if="!error && product.id">
+            <div class="product-container">
+
+                
+                <div class="product-images">
+                    <img 
+                        x-bind:src="product.image || 'https://via.placeholder.com/800x1000?text=Фото+товара'" 
+                        class="main-img" 
+                        alt="Главное фото"
+                        @error="this.src = 'https://via.placeholder.com/800x1000?text=Ошибка+фото'"
+                    >
+                    <img 
+                        x-bind:src="product.image2 || product.image || 'https://via.placeholder.com/800x1000?text=Второе+фото'" 
+                        class="hover-img" 
+                        alt="Второе фото"
+                        @error="this.src = 'https://via.placeholder.com/800x1000?text=Ошибка+фото'"
+                    >
+                </div>
+
+                <!-- Правая часть -->
+                <div class="product-info">
+
+                    <h2 class="brand" x-text="product.brand || 'Бренд'"></h2>
+                    <h1 class="title" x-text="product.title || 'Название товара'"></h1>
+                    <p class="price" x-text="product.price ? product.price.toLocaleString('ru-RU') + ' ₽' : 'Цена не указана'"></p>
+
+                    <!--  ЕСЛИ ТОВАР ЕСТЬ В НАЛИЧИИ -->
+                    <template x-if="product.in_stock && sizes.length > 0 && product.category !== 'accessories'">
+                        <div class="size-section">
+                            <div class="size-header">
+                                <span class="size-label">Размер</span>
+
+                                
+                                <a href="#" class="size-guide" @click.prevent="openSizeGuide()">Таблица размеров</a>
+
+                            </div>
+
+                            <div class="size-dropdown-wrapper" x-data="{ open: false }">
+                                <button 
+                                    @click="open = !open" 
+                                    class="size-trigger"
+                                    :class="{ 'size-selected': selectedSize }"
+                                    type="button"
+                                >
+                                    <span x-text="selectedSize || 'Выберите размер'"></span>
+                                    <svg class="dropdown-arrow" :class="{ 'rotated': open }" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                <div 
+                                    x-show="open" 
+                                    @click.away="open = false"
+                                    x-transition
+                                    class="size-dropdown-list"
+                                >
+                                    <div class="unisex-note">
+                                        Универсальные модели представлены в мужских размерах
+                                    </div>
+                                    <div class="size-options-scroll">
+                                        <template x-for="size in sizes" :key="size">
+                                            <button 
+                                                @click="selectedSize = size; open = false"
+                                                :class="{ 'active': selectedSize === size }"
+                                                x-text="size"
+                                            ></button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+
+                    <!--  ЕСЛИ ТОВАРА НЕТ В НАЛИЧИИ -->
+                    <template x-if="!product.in_stock">
+                        <div class="size-section out-of-stock" x-data="{ open: false }">
+
+                            <div class="size-header">
+                                <span class="size-label">Размер</span>
+                            </div>
+
+                            <button 
+                                @click="open = !open"
+                                class="size-trigger out-of-stock-trigger"
+                                type="button"
+                            >
+                                <span>Сейчас нет в наличии</span>
+                                <svg class="dropdown-arrow" :class="{ 'rotated': open }" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                        </div>
+                    </template>
+
+                    
+                    <div class="actions">
+                        <button 
+                            @click="addToCart()"
+                            :disabled="!product.in_stock || (sizes.length > 0 && product.category !== 'accessories' && !selectedSize)"
+                            class="add-to-bag"
+                        >
+                            ДОБАВИТЬ В КОРЗИНУ
+                        </button>
+
+                        <button 
+                            @click="addToWishlist()"
+                            :disabled="!product.in_stock || (sizes.length > 0 && product.category !== 'accessories' && !selectedSize)"
+                            class="wishlist"
+                            :class="{ 'disabled-wishlist': !product.in_stock || (sizes.length > 0 && product.category !== 'accessories' && !selectedSize) }"
+                        >
+                            <span class="heart">♡</span>
+                            Избранное
+                        </button>
+                    </div>
+
+                    
+                    <div class="delivery-info">
+                        <p>Ориентировочная доставка: <strong x-text="getDeliveryDates()"></strong></p>
+                        <p>Пошлины включены в стоимость</p>
+                    </div>
+
+                </div> 
+
+            </div>
+        </template>
+
+        <div x-show="!product.id && !error" class="loader">
+            Загрузка товара...
+        </div>
+
+        
+        <div 
+            class="size-guide-modal" 
+            x-show="showSizeGuide"
+            x-transition.opacity
+        >
+            <div class="size-guide-content" @click.away="closeSizeGuide()">
+
+                <div class="sg-header">
+                    <h2>Таблица размеров</h2>
+                    <button class="sg-close" @click="closeSizeGuide()">✕</button>
+                </div>
+
+                <div class="sg-product">
+                    <img :src="product.image" alt="">
+                    <div>
+                        <p class="sg-brand" x-text="product.brand"></p>
+                        <p class="sg-title" x-text="product.title"></p>
+                    </div>
+                </div>
+
+                <table class="sg-table">
+                    <thead>
+                        <tr>
+                            <th>Международный</th>
+                            <th>Российский</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template x-for="row in sizeGuideData" :key="row.intl">
+                            <tr>
+                                <td x-text="row.intl"></td>
+                                <td x-text="row.ru"></td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Аксессуары — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/accessories.css">
+    <link rel="stylesheet" href="/css/footer.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/accessories.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<section class="accessories-page"
+         x-data="accessoriesPage()"
+         x-init="loadAccessories(); initGlobalSearch();">
+
+    <p class="clothes-search-info"
+       x-show="searchMessage"
+       x-text="searchMessage"
+       style="margin-bottom: 20px; font-size: 18px; font-weight: 500; text-align: center;">
+    </p>
+
+    <div class="accessories-filters">
+
+        <div class="accessories-price-filter">
+
+            <div class="accessories-price-inputs">
+                <div>
+                    <label>От</label>
+                    <input type="number" min="0" max="200000"
+                           x-model.number="priceMin"
+                           @input="syncPriceRange('min')">
+                </div>
+
+                <div>
+                    <label>До</label>
+                    <input type="number" min="0" max="200000"
+                           x-model.number="priceMax"
+                           @input="syncPriceRange('max')">
+                </div>
+            </div>
+
+            <div class="accessories-price-slider" x-ref="priceSlider">
+                <div class="accessories-price-slider-track"></div>
+                <div class="accessories-price-slider-range" x-ref="priceRange"></div>
+
+                <input type="range" min="0" max="200000" step="100"
+                       x-model.number="priceMin"
+                       @input="syncPriceRange('min')">
+
+                <input type="range" min="0" max="200000" step="100"
+                       x-model.number="priceMax"
+                       @input="syncPriceRange('max')">
+            </div>
+
+        </div>
+
+        <div class="accessories-sort-group">
+            <select x-model="sortBy" @change="applyFilters()">
+                <option value="">Сортировка</option>
+                <option value="price_asc">Цена: по возрастанию</option>
+                <option value="price_desc">Цена: по убыванию</option>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="accessories-grid" x-show="!noResults">
+        <template x-for="item in items" :key="item.id">
+
+            <a :href="'product.html?id=' + item.id" class="accessories-card-link">
+                <div class="accessories-card">
+
+                    <div class="accessories-image">
+                        <img :src="item.image" class="img-main">
+                        <img :src="item.image2" class="img-hover">
+                    </div>
+
+                    <p class="accessories-brand" x-text="item.brand"></p>
+                    <h3 class="accessories-name" x-text="item.title"></h3>
+                    <p class="accessories-price" x-text="item.price + ' ₽'"></p>
+
+                </div>
+            </a>
+
+        </template>
+    </div>
+</section>
+
+</body>
+</html>

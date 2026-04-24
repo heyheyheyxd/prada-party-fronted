@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+
+    <link rel="stylesheet" href="/css/login.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+
+</head>
+
+<body x-data="registerForm()">
+
+<div class="overlay">
+    <div class="modal">
+
+        <h1>Регистрация</h1>
+
+        <form @submit.prevent="register">
+
+            <label>Email</label>
+            <input type="email" placeholder="Введите email" x-model="email" required>
+
+            <label>Пароль</label>
+            <input type="password" placeholder="Введите пароль" x-model="password" required>
+
+            <label>Повторите пароль</label>
+            <input type="password" placeholder="Повторите пароль" x-model="password2" required>
+
+            <button type="submit" class="submit">Создать аккаунт</button>
+
+        </form>
+
+        <p class="register">
+            Уже есть аккаунт?
+            <a href="login.html">Войти</a>
+        </p>
+
+    </div>
+</div>
+
+<!-- Контейнер для тостов -->
+<div id="toast-container"></div>
+
+<script>
+function registerForm() {
+    return {
+        email: "",
+        password: "",
+        password2: "",
+        
+        showToast(message) {
+            const container = document.getElementById("toast-container");
+
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        },
+
+        async register() {
+            if (this.password !== this.password2) {
+                this.showToast("Пароли не совпадают");
+                return;
+            }
+
+            const pb = new PocketBase('http://127.0.0.1:8090');
+
+            try {
+                await pb.collection('users').create({
+                    email: this.email,
+                    password: this.password,
+                    passwordConfirm: this.password2
+                });
+
+                this.showToast("Аккаунт успешно создан");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 800);
+
+            } catch (e) {
+                console.log("PB ERROR:", e);
+
+                const emailError = e?.response?.data?.email?.message;
+                const passwordError = e?.response?.data?.password?.message;
+
+                if (emailError && emailError.includes("unique")) {
+                    this.showToast("Аккаунт с таким email уже существует");
+                    return;
+                }
+
+                if (passwordError) {
+                    this.showToast("Пароль должен состоять минимум из 8 символов");
+                    return;
+                }
+
+                this.showToast("Ошибка регистрации. Попробуйте позже");
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

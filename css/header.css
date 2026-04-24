@@ -1,0 +1,210 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 40px;
+}
+
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: #111;
+    text-decoration: none;
+}
+
+.nav {
+    margin-left: 40px;
+}
+
+.nav a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #111;
+    font-size: 15px;
+}
+
+
+.header-right a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.login-btn {
+    color: #111;
+}
+
+.register-btn {
+    padding: 8px 16px;
+    background: #111;
+    color: #fff;
+    border-radius: 4px;
+}
+
+
+
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+    cursor: pointer;
+}
+
+.user-menu:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+.user-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(0,0,0,0.15);
+}
+
+.user-name {
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    color: #111;
+}
+
+.user-email {
+    font-size: 18px;
+}
+
+header {
+    padding: 20px 80px !important;
+    min-height: 90px !important;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+
+header .logo img {
+    height: 40px !important;
+}
+
+header nav a {
+    font-size: 18px !important;
+    font-weight: 500;
+}
+
+header .user-avatar img {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50%;
+}
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 40px;
+}
+
+.search-box input {
+    width: 220px;
+    padding: 10px 35px 10px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    background: transparent;
+    transition: 0.2s;
+}
+
+.search-box input:focus {
+    border-bottom: 1px solid #111;
+}
+
+.search-box .search-icon {
+    position: absolute;
+    right: 0;
+    font-size: 16px;
+    color: #666;
+    pointer-events: none;
+}
+/* Иконки корзины и избранного (Farfetch-style) */
+.user-and-icons {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.icon-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.icon-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+.icon {
+    font-size: 24px;
+    color: #111;
+}
+
+.counter {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #111;          
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Профиль рядом с иконками */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.user-menu:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.user-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+

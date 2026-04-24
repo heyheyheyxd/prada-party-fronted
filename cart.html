@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Корзина — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/cart.css">
+
+    <script src="https://unpkg.com/pocketbase@0.22.1/dist/pocketbase.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="/js/cart.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main class="cart-main" x-data="cartPage()" x-init="loadCart()">
+
+    <section class="cart-page">
+
+        <h1 class="cart-title">Корзина</h1>
+
+        <!-- Пустая корзина -->
+        <div class="cart-empty" x-show="!loading && items.length === 0">
+            <p class="empty-title">Корзина пуста, но это легко исправить.</p>
+            <p class="empty-subtitle">Мы собрали лучшие позиции — начните создавать свой идеальный образ.</p>
+
+            <a href="catalog.html" class="cart-empty-link">Перейти в каталог</a>
+
+            <!-- Рекомендуем вам -->
+            <div class="recommend-block" x-show="recommended.length > 0">
+                <h2 class="recommend-title">Рекомендуем вам</h2>
+
+                <div class="recommend-grid">
+                    <template x-for="item in recommended" :key="item.id">
+                        <a :href="'product.html?id=' + item.id" class="recommend-card">
+                            <div class="recommend-image">
+                                <img :src="item.image" class="img-main">
+                                <img :src="item.image2 || item.image" class="img-hover">
+                            </div>
+
+                            <p class="recommend-brand" x-text="item.brand"></p>
+                            <p class="recommend-name" x-text="item.title"></p>
+                            <p class="recommend-price" x-text="item.price + ' ₽'"></p>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Корзина с товарами -->
+        <div class="cart-content" x-show="items.length > 0">
+
+            <!-- Левая колонка — список товаров -->
+            <div class="cart-items" x-show="!loading && items.length > 0">
+                <template x-for="(item, index) in items" :key="index">
+                    <div class="cart-item" :class="{ 'out-of-stock': !item.in_stock }">
+                        <input 
+                            type="checkbox" 
+                            class="cart-select"
+                            x-model="item.selected"
+                        >
+                        <a class="cart-item-image" :href="'product.html?id=' + item.id">
+                            <img :src="item.image" :alt="item.title">
+                        </a>
+
+
+                        <div class="cart-item-info">
+                            <p class="brand" x-text="item.brand"></p>
+                            <p class="title" x-text="item.title"></p>
+
+                            <template x-if="item.size">
+                                <p class="size">Размер: <span x-text="item.size"></span></p>
+                            </template>
+
+                            <p class="price" x-text="formatPrice(item.price) + ' ₽'"></p>
+
+                            
+                            <template x-if="!item.in_stock">
+                                <div class="stock-warning">Нет в наличии</div>
+                            </template>
+
+                            <div class="cart-item-actions">
+                                <div class="quantity">
+                                    <button @click="decreaseQty(index)" :disabled="!item.in_stock">−</button>
+                                    <span x-text="item.quantity"></span>
+                                    <button @click="increaseQty(index)" :disabled="!item.in_stock">+</button>
+                                </div>
+
+                                
+                                <button class="remove" @click="removeItem(index)">Удалить</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+
+            <!-- Правая колонка — итог -->
+            <aside class="cart-summary">
+                <h2>Итого</h2>
+                <p class="summary-row">
+                    Товары: <span x-text="totalItems()"></span>
+                </p>
+                <p class="summary-row">
+                Сумма: <span x-text="formatPrice(totalPrice()) + ' ₽'"></span>
+                </p>
+
+                
+<button 
+    class="checkout-btn"
+    :disabled="!canCheckout() || totalItems() === 0"
+    @click="
+        localStorage.setItem('checkoutItems', JSON.stringify(items.filter(i => i.selected)));
+        window.location.href = 'checkout.html';
+    "
+>
+    Перейти к оформлению
+</button>
+
+
+
+                
+<template x-if="!canCheckout()">
+    <p class="checkout-warning">
+        Некоторые выбранные товары недоступны. Снимите галочку или удалите их, чтобы продолжить оформление.
+    </p>
+</template>
+
+
+                <button class="clear-btn" @click="clearCart()">
+                    Очистить корзину
+                </button>
+            </aside>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

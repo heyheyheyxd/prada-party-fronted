@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+
+    <link rel="stylesheet" href="/css/login.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+</head>
+
+<body x-data="loginForm()">
+
+<div class="overlay">
+    <div class="modal">
+
+        <h1>Вход</h1>
+
+        <form @submit.prevent="login">
+
+            <label>Email</label>
+            <input type="email" placeholder="Введите email" x-model="email" required>
+
+            <label>Пароль</label>
+            <input type="password" placeholder="Введите пароль" x-model="password" required>
+
+            <button type="submit" class="submit">Войти</button>
+
+        </form>
+
+        <p class="register">
+            Нет аккаунта?
+            <a href="register.html">Создать</a>
+        </p>
+
+    </div>
+</div>
+
+<!-- Контейнер для тостов входа -->
+<div id="toast-container-login"></div>
+
+<script>
+function loginForm() {
+    return {
+        email: "",
+        password: "",
+
+        showToast(message) {
+            const container = document.getElementById("toast-container-login");
+
+            const toast = document.createElement("div");
+            toast.className = "toast-login";
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        },
+
+        async login() {
+            const pb = new PocketBase('http://127.0.0.1:8090');
+
+            try {
+                await pb.collection('users').authWithPassword(this.email, this.password);
+
+                this.showToast("Успешный вход");
+
+                setTimeout(() => {
+                    // ⭐ Проверяем, есть ли сохранённый редирект
+                    const redirect = localStorage.getItem("redirectAfterLogin");
+
+                    if (redirect) {
+                        localStorage.removeItem("redirectAfterLogin");
+                        window.location.href = redirect;
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                }, 600);
+
+            } catch (e) {
+                console.log("LOGIN ERROR:", e);
+                this.showToast("Неверный email или пароль");
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>

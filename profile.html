@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/profile.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+<div id="toast-container"></div>
+<div id="header"></div>
+
+<section class="profile-page" x-data="profilePage()" x-init="init()">
+
+    <div class="profile-container">
+
+        <!-- ЛЕВОЕ МЕНЮ -->
+        <aside class="profile-sidebar">
+
+            <div class="avatar-wrapper" x-data="{ preview: null }">
+                <label for="avatar-input">
+                    <img :src="preview || avatar" class="avatar-img">
+                </label>
+
+                <input id="avatar-input" type="file" accept="image/*" 
+                    @change="
+                        const file = $event.target.files[0];
+                        if (file) preview = URL.createObjectURL(file);
+                    ">
+            </div>
+
+            <button @click="tab = 'info'" :class="{active: tab === 'info'}">Контактная информация</button>
+            <button @click="tab = 'orders'" :class="{active: tab === 'orders'}">Заказы</button>
+            <button @click="logout" class="logout">Выйти</button>
+        </aside>
+
+        <!-- ПРАВАЯ ЧАСТЬ -->
+        <div class="profile-content">
+
+            <!-- Контактная информация -->
+            <div x-show="tab === 'info'">
+                <h2>Контактная информация</h2>
+
+                <label>Email</label>
+                <input type="text" x-model="email" disabled>
+
+                <label>Имя</label>
+                <input type="text" x-model="first_name">
+
+                <label>Фамилия</label>
+                <input type="text" x-model="last_name">
+                
+                <label>Телефон</label>
+                <input type="text" x-model="phone" id="phone-input" maxlength="16">
+
+                <label>Адрес</label>
+                <input type="text" x-model="address">
+
+                <!-- ⭐ Новое поле -->
+                <label>Почтовый индекс</label>
+                <input type="text" x-model="postal_code" id="postal-input" maxlength="6">
+
+                <label>Дата рождения</label>
+                <input type="date" x-model="birthdate">
+
+                <button class="save-btn" @click="saveInfo">Сохранить</button>
+            </div>
+
+            <!-- Заказы -->
+<div x-show="tab === 'orders'" class="orders-section">
+
+    <h2>Ваши заказы</h2>
+
+    <!-- Если заказов нет -->
+    <template x-if="orders.length === 0">
+        <p class="no-orders">У вас пока нет заказов.</p>
+    </template>
+
+    <!-- Список заказов -->
+    <div class="orders-list" x-show="orders.length > 0">
+        <template x-for="order in orders" :key="order.id">
+
+            <div class="order-card">
+
+                <div class="order-header">
+                    <p class="order-number">Заказ № <span x-text="order.order_number"></span></p>
+                    <p class="order-status" x-text="order.status"></p>
+                </div>
+
+                <p class="order-sum">Сумма: <span x-text="order.total_price + ' ₽'"></span></p>
+                <p class="order-delivery">Доставка: <span x-text="formatDelivery(order.delivery_date)"></span></p>
+
+                <div class="order-items">
+                    <template x-for="item in order.items">
+                        <div class="order-item">
+                            <img :src="item.image" class="order-item-img">
+
+                            <div class="order-item-info">
+                                <p class="brand" x-text="item.brand"></p>
+                                <p class="title" x-text="item.title"></p>
+                                <p class="qty">Количество: <span x-text="item.quantity"></span></p>
+                                <p class="price" x-text="item.price + ' ₽'"></p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+            </div>
+
+        </template>
+    </div>
+
+</div>
+
+
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

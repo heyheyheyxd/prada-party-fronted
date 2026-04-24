@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Оформление заказа — Prada Party</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/checkout.css">
+
+    <script src="https://unpkg.com/pocketbase@0.22.1/dist/pocketbase.umd.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="/js/checkout.js"></script>
+    <script src="/js/usermenu.js"></script>
+    <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+
+<div id="toast-container"></div>
+<div id="header"></div>
+
+<main class="checkout-main" x-data="checkoutPage()" x-init="init()">
+
+    <section class="checkout-page">
+
+        <h1 class="checkout-title">Оформление заказа</h1>
+
+        <!-- Если нет товаров -->
+        <div class="checkout-empty" x-show="!loading && items.length === 0">
+            <p class="empty-title">Ваша корзина пуста.</p>
+            <p class="empty-subtitle">Добавьте товары в корзину, чтобы оформить заказ.</p>
+            <a href="catalog.html" class="checkout-empty-link">Перейти в каталог</a>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="checkout-content" x-show="items.length > 0">
+
+            <!-- Левая колонка -->
+            <div class="checkout-left">
+
+                <!-- Адрес доставки -->
+                <section class="checkout-block">
+                    <div class="checkout-block-header">
+                        <h2>Адрес доставки</h2>
+                        <button 
+                            class="checkout-edit-btn" 
+                            type="button"
+                            @click="editingAddress = !editingAddress"
+                            x-text="editingAddress ? 'Сохранить адрес' : 'Изменить'">
+                        </button>
+                    </div>
+
+                    <!-- Просмотр -->
+                    <div class="checkout-address-view" x-show="!editingAddress">
+                        <template x-if="address && postal_code && phone">
+                            <div class="address-lines">
+                                <p>Имя: <span x-text="first_name"></span></p>
+                                <p>Адрес: <span x-text="address"></span></p>
+                                <p>Индекс: <span x-text="postal_code"></span></p>
+                                <p>Телефон: <span x-text="phone"></span></p>
+                            </div>
+                        </template>
+
+                        <template x-if="!address || !postal_code || !phone">
+                            <p class="address-warning">
+                                Заполните адрес доставки, индекс и телефон, чтобы продолжить.
+                            </p>
+                        </template>
+                    </div>
+
+                    <!-- Редактирование -->
+                    <div class="checkout-address-edit" x-show="editingAddress">
+                        <label>Имя</label>
+                        <input type="text" x-model="first_name">
+
+                        <label>Адрес</label>
+                        <input type="text" x-model="address">
+
+                        <label>Почтовый индекс</label>
+                        <input type="text" x-model="postal_code" maxlength="6">
+
+                        <label>Телефон</label>
+                        <input type="text" x-model="phone">
+                    </div>
+                </section>
+
+                <!-- Товары -->
+                <section class="checkout-block">
+                    <h2>Ваш заказ</h2>
+
+                    <div class="checkout-items">
+                        <template x-for="item in items" :key="item.id + '_' + (item.size || '')">
+                            <div class="checkout-item">
+                                <a class="checkout-item-image" :href="'product.html?id=' + item.id">
+                                    <img :src="item.image" :alt="item.title">
+                                </a>
+
+                                <div class="checkout-item-info">
+                                    <p class="brand" x-text="item.brand"></p>
+                                    <p class="title" x-text="item.title"></p>
+
+                                    <template x-if="item.size">
+                                        <p class="size">Размер: <span x-text="item.size"></span></p>
+                                    </template>
+
+                                    <p class="price" x-text="formatPrice(item.price) + ' ₽'"></p>
+
+                                    <p class="qty">Количество: <span x-text="item.quantity"></span></p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </section>
+
+                <!-- Способ оплаты -->
+                <section class="checkout-block payment-block">
+                    <h2>Способ оплаты</h2>
+
+                    <div class="payment-cards">
+
+                        <div 
+                            class="payment-card" 
+                            :class="{active: payment === 'cash'}"
+                            @click="payment = 'cash'">
+                            <div class="payment-title">Наличными при получении</div>
+                            <div class="payment-desc">Оплата наличными курьеру при доставке</div>
+                        </div>
+
+                        <div 
+                            class="payment-card" 
+                            :class="{active: payment === 'card'}"
+                            @click="payment = 'card'">
+                            <div class="payment-title">Картой при получении</div>
+                            <div class="payment-desc">Оплата банковской картой курьеру</div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Правая колонка -->
+            <aside class="checkout-summary">
+
+                <h2>Итого</h2>
+
+                <p class="summary-row">
+                    Товары: <span x-text="totalItems()"></span>
+                </p>
+
+                <p class="summary-row">
+                    Сумма товаров: <span x-text="formatPrice(totalPrice()) + ' ₽'"></span>
+                </p>
+
+                <p class="summary-row">
+                    Доставка: <span x-text="deliveryCost > 0 ? formatPrice(deliveryCost) + ' ₽' : 'Бесплатно'"></span>
+                </p>
+
+                <p class="summary-row summary-total">
+                    Итого к оплате: <span x-text="formatPrice(totalWithDelivery()) + ' ₽'"></span>
+                </p>
+
+                <!-- Предупреждение (чуть ниже, как просил) -->
+                <template x-if="warningMessage()">
+                    <p class="checkout-warning" style="margin-top: 12px;" x-text="warningMessage()"></p>
+                </template>
+
+                <button 
+                    class="checkout-btn"
+                    :disabled="!canOrder()"
+                    @click="placeOrder">
+                    Заказать
+                </button>
+
+                <a href="delivery.html" class="back-to-cart">Узнать политику доставки</a>
+
+                <div class="delivery-estimate">
+                    <h2>Примерная дата доставки</h2>
+                    <p class="delivery-estimate-date" x-text="getDeliveryDates()"></p>
+                </div>
+
+            </aside>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>

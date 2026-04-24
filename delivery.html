@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Доставка — Prada Party</title>
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/delivery.css">
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+
+    <script src="/js/usermenu.js" defer></script>
+    <script src="/js/main.js" defer></script>
+    <script src="/js/delivery.js" defer></script>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="delivery-page">
+
+    <div class="delivery-layout">
+
+        <aside class="delivery-sidebar">
+            <h3>Помощь</h3>
+            <ul>
+                <li><a href="/delivery.html" class="active">Доставка</a></li>
+                <li><a href="/returns.html">Возврат</a></li>
+                <li><a href="/payment.html">Оплата</a></li>
+
+            </ul>
+        </aside>
+
+        <section class="delivery-content">
+<h1>Доставка</h1>
+<p class="delivery-intro">
+    Мы стремимся обеспечить максимально быстрый и комфортный процесс доставки. 
+    Все заказы проходят тщательную проверку качества и отправляются в надёжной фирменной упаковке.
+</p>
+
+
+<div class="delivery-item">
+    <button class="delivery-header">
+        Сроки доставки
+        <span class="delivery-arrow">▼</span>
+    </button>
+    <div class="delivery-content-box">
+        <p><strong>Стандартная доставка:</strong> 2–7 рабочих дней в зависимости от региона.</p>
+        <p><strong>Экспресс‑доставка:</strong> 1–3 рабочих дня (доступна для крупных городов).</p>
+        <p><strong>Международная доставка:</strong> 7–14 дней, сроки зависят от страны и таможенной обработки.</p>
+        <p>После оформления заказа вы получите письмо с подтверждением и ориентировочной датой доставки.</p>
+    </div>
+</div>
+
+
+<div class="delivery-item">
+    <button class="delivery-header">
+        Стоимость доставки
+        <span class="delivery-arrow">▼</span>
+    </button>
+    <div class="delivery-content-box">
+        <p><strong>Стандартная доставка:</strong> Бесплатно при заказе от 15 000₽.</p>
+        <p><strong>Экспресс‑доставка:</strong> от 1500₽ (рассчитывается автоматически при оформлении).</p>
+        <p><strong>Международная доставка:</strong> от 2500₽.</p>
+        <p>Точная стоимость доставки будет указана в корзине перед оплатой.</p>
+    </div>
+</div>
+
+
+<div class="delivery-item">
+    <button class="delivery-header">
+        Отслеживание
+        <span class="delivery-arrow">▼</span>
+    </button>
+    <div class="delivery-content-box">
+        <p>После отправки заказа вы получите письмо с трек‑номером.</p>
+        <p>Вы сможете отслеживать статус доставки в личном кабинете или на сайте транспортной компании.</p>
+        <p><strong>Статусы доставки:</strong></p>
+        <ul>
+            <li>Заказ принят</li>
+            <li>Упаковка</li>
+            <li>Передан курьерской службе</li>
+            <li>В пути</li>
+            <li>Доставлен</li>
+        </ul>
+    </div>
+</div>
+<div class="delivery-item">
+    <button class="delivery-header">
+        Условия доставки
+        <span class="delivery-arrow">▼</span>
+    </button>
+    <div class="delivery-content-box">
+        <p>Мы сотрудничаем только с проверенными курьерскими службами, чтобы обеспечить безопасность и сохранность вашего заказа.</p>
+        <p><strong>Важно:</strong></p>
+        <ul>
+            <li>Курьер может связаться с вами для уточнения времени доставки.</li>
+            <li>При получении заказа может потребоваться документ, удостоверяющий личность.</li>
+            <li>Если вы не успели получить заказ, курьер совершит повторную попытку доставки.</li>
+        </ul>
+    </div>
+</div>
+<div class="delivery-item">
+    <button class="delivery-header">
+        Часто задаваемые вопросы
+        <span class="delivery-arrow">▼</span>
+    </button>
+    <div class="delivery-content-box">
+        <p><strong>Можно ли изменить адрес доставки?</strong><br>
+        Да, если заказ ещё не передан курьерской службе. Свяжитесь с поддержкой.</p>
+
+        <p><strong>Что делать, если заказ задерживается?</strong><br>
+        Проверьте статус по трек‑номеру или напишите в службу поддержки.</p>
+
+        <p><strong>Можно ли открыть посылку до оплаты?</strong><br>
+        Да, в некоторых регионах доступна услуга «Проверка перед оплатой».</p>
+    </div>
+</div>
+
+
+        </section>
+
+    </div>
+
+</div>
+
+<div id="footer"></div>
+
+</body>
+</html>
