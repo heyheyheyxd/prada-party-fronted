@@ -214,4 +214,24 @@ header .user-avatar img {
     object-fit: cover;
     border: 1px solid #ddd;
 }
+@media (max-width: 768px) {
+    .header-container {
+        padding: 10px 20px;
+    }
+    .nav-links {
+        display: none; /* скрываем меню */
+    }
+    
+    .burger {
+        display: block; /* показываем бургер */
+    }
+
+    .header-right {
+        gap: 12px;
+    }
+
+    .logo img {
+        width: 120px;
+    }
+}
 
