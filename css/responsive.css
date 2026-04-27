@@ -1,0 +1,243 @@
+/* =========================================================
+   📱 1. ГЛОБАЛЬНЫЕ БРЕЙКПОИНТЫ
+   ========================================================= */
+@media (max-width: 1024px) {}
+@media (max-width: 768px) {}
+@media (max-width: 480px) {}
+
+
+/* =========================================================
+   📱 2. HEADER (все страницы)
+   ========================================================= */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 12px 20px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .burger-menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    .header-right {
+        gap: 14px;
+    }
+
+    .logo img {
+        width: 120px;
+    }
+}
+
+
+/* =========================================================
+   📱 3. FOOTER (все страницы)
+   ========================================================= */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    .footer-philosophy {
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    .payments-row img {
+        height: 28px;
+    }
+}
+
+
+/* =========================================================
+   📱 4. КАТАЛОГ (catalog.html)
+   ========================================================= */
+@media (max-width: 768px) {
+    .catalog-container {
+        padding: 0 16px;
+    }
+
+    .items-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .item-card img {
+        height: 180px;
+    }
+
+    .filters {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .price-filter {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .item-card img {
+        height: 240px;
+    }
+}
+
+
+/* =========================================================
+   📱 5. КАРТОЧКА ТОВАРА (если появится отдельная страница)
+   ========================================================= */
+@media (max-width: 768px) {
+    .product-page {
+        flex-direction: column;
+        padding: 0 16px;
+    }
+
+    .product-images img {
+        width: 100%;
+        height: auto;
+    }
+
+    .product-info {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+
+/* =========================================================
+   📱 6. ПРОФИЛЬ (profile.html)
+   ========================================================= */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        padding: 0 16px;
+    }
+
+    .profile-sidebar {
+        width: 100%;
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+
+    .profile-content {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .profile-sidebar button {
+        flex-shrink: 0;
+    }
+}
+
+
+/* =========================================================
+   📱 7. ЗАКАЗЫ (внутри профиля)
+   ========================================================= */
+@media (max-width: 768px) {
+    .order-card {
+        padding: 16px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .order-item-img {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+/* =========================================================
+   📱 8. КОРЗИНА (cart.html)
+   ========================================================= */
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cart-item img {
+        width: 100%;
+        height: auto;
+    }
+
+    .cart-summary {
+        width: 100%;
+        margin-top: 20px;
+    }
+}
+
+
+/* =========================================================
+   📱 9. МОДАЛКИ (login, register, reset)
+   ========================================================= */
+@media (max-width: 480px) {
+    .modal {
+        width: 90%;
+        padding: 24px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    input {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .submit {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+
+/* =========================================================
+   📱 10. ТЕКСТЫ И ТИПОГРАФИКА
+   ========================================================= */
+@media (max-width: 480px) {
+    h1, h2, h3 {
+        font-size: 90%;
+    }
+
+    p, a, label, input, button {
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   📱 11. ГЛОБАЛЬНЫЕ СЕТКИ
+   ========================================================= */
+@media (max-width: 768px) {
+    .grid-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-4 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
