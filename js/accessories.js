@@ -67,13 +67,21 @@ function accessoriesPage() {
                 result.sort((a, b) => b.price - a.price);
             }
 
+            if (this.priceMin === 0 && this.priceMax === 200000 && this.query.trim() === "") {
+    
+                this.searchMessage = "";
+                this.noResults = false;
+                this.items = result;
+                 return;
+            }
+
             if (result.length === 0) {
                 this.noResults = true;
                 this.searchMessage = "По вашему запросу ничего не найдено";
             } else {
                 this.noResults = false;
                 const count = result.length;
-                this.searchMessage = `По вашему запросу найдено: ${count} ${this.pluralize(count)}`;
+                this.searchMessage = `Найдено: ${count} ${this.pluralize(count)}`;
             }
 
             this.items = result;

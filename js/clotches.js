@@ -67,6 +67,14 @@ function clothesPage() {
                 result.sort((a, b) => b.price - a.price);
             }
 
+            if (this.priceMin === 0 && this.priceMax === 200000 && this.query.trim() === "") {
+    
+                this.searchMessage = "";
+                this.noResults = false;
+                this.items = result;
+                 return;
+            }
+
             if (result.length === 0) {
                 this.noResults = true;
                 this.searchMessage = "По вашему запросу ничего не найдено";
