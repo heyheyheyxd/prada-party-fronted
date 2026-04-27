@@ -13,7 +13,7 @@ function shoesPage() {
             const pb = new PocketBase("https://prada-party.onrender.com");
 
             const records = await pb.collection("products").getFullList({
-                filter: 'category = "shoes"'
+                filter: 'gender = "women"'
             });
 
             this.allItems = records.map(item => this.mapItem(item));

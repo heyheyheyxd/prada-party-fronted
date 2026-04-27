@@ -13,7 +13,7 @@ function accessoriesPage() {
             const pb = new PocketBase("https://prada-party.onrender.com");
 
             const records = await pb.collection("products").getFullList({
-                filter: 'category = "accessories"'
+                filter: 'gender = "unisex"'
             });
 
             this.allItems = records.map(item => this.mapItem(item));
