@@ -13,7 +13,7 @@ function clothesPage() {
             const pb = new PocketBase("https://prada-party.onrender.com");
 
             const records = await pb.collection("products").getFullList({
-                filter: 'category = "clothes"'
+                filter: 'gender = "men"'
             });
 
             this.allItems = records.map(item => this.mapItem(item));
