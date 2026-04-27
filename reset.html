@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Смена пароля</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+</head>
+
+<body x-data="resetForm()">
+
+<div class="overlay">
+    <div class="modal">
+
+        <h1>Смена пароля</h1>
+
+        <form @submit.prevent="changePassword">
+
+            <label>Текущий пароль</label>
+            <input type="password" placeholder="Введите текущий пароль" x-model="oldPass" required>
+
+            <label>Новый пароль</label>
+            <input type="password" placeholder="Введите новый пароль" x-model="newPass" required>
+
+            <label>Повторите новый пароль</label>
+            <input type="password" placeholder="Повторите новый пароль" x-model="newPass2" required>
+
+            <button type="submit" class="submit">Сохранить</button>
+
+        </form>
+
+        <p class="register">
+            <a href="profile.html">Вернуться в профиль</a>
+        </p>
+
+    </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+function resetForm() {
+    return {
+        oldPass: "",
+        newPass: "",
+        newPass2: "",
+
+        showToast(message) {
+            const container = document.getElementById("toast-container");
+
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = message;
+
+            container.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 3000);
+        },
+
+        async changePassword() {
+            const pb = new PocketBase("https://prada-party.onrender.com"); // локалка
+
+            // 1. Новый пароль отличается от старого
+            if (this.oldPass === this.newPass) {
+                this.showToast("Новый пароль не должен совпадать со старым");
+                return;
+            }
+
+            // 2. Минимум 8 символов
+            if (this.newPass.length < 8) {
+                this.showToast("Пароль должен быть минимум 8 символов");
+                return;
+            }
+
+            // 3. Запрещаем русские буквы
+            if (/[А-Яа-яЁё]/.test(this.newPass)) {
+                this.showToast("Пароль должен содержать только английские буквы");
+                return;
+            }
+
+            // 4. Совпадение нового пароля и повторения
+            if (this.newPass !== this.newPass2) {
+                this.showToast("Пароли не совпадают");
+                return;
+            }
+
+            try {
+                const userId = pb.authStore.model.id;
+
+                await pb.collection("users").update(userId, {
+                    oldPassword: this.oldPass,
+                    password: this.newPass,
+                    passwordConfirm: this.newPass2
+                });
+
+                this.showToast("Пароль успешно изменён");
+
+                
+                setTimeout(() => {
+                    pb.authStore.clear();
+                    localStorage.removeItem("pocketbase_auth"); 
+                    window.location.href = "login.html";
+                }, 3000);
+
+            } catch (e) {
+                console.log("PB ERROR:", e);
+
+                if (e?.response?.data?.oldPassword) {
+                    this.showToast("Неверный текущий пароль");
+                    return;
+                }
+
+                if (e?.response?.data?.password) {
+                    this.showToast("Ошибка: пароль слишком слабый");
+                    return;
+                }
+
+                this.showToast("Ошибка. Попробуйте позже");
+            }
+        }
+    }
+}
+
+
+</script>
+
+</body>
+</html>

@@ -70,7 +70,10 @@ function registerForm() {
                 this.showToast("Пароли не совпадают");
                 return;
             }
-
+            if (/[А-Яа-яЁё]/.test(this.password)) {
+                this.showToast("Пароль должен содержать только английские буквы");
+                return;
+            }
             const pb = new PocketBase('https://prada-party.onrender.com');
 
             try {

@@ -40,6 +40,7 @@
 
             <button @click="tab = 'info'" :class="{active: tab === 'info'}">Контактная информация</button>
             <button @click="tab = 'orders'" :class="{active: tab === 'orders'}">Заказы</button>
+            <button @click="goToReset">Смена пароля</button>
             <button @click="logout" class="logout">Выйти</button>
         </aside>
 
@@ -65,7 +66,7 @@
                 <label>Адрес</label>
                 <input type="text" x-model="address">
 
-                <!-- ⭐ Новое поле -->
+                
                 <label>Почтовый индекс</label>
                 <input type="text" x-model="postal_code" id="postal-input" maxlength="6">
 
@@ -118,16 +119,9 @@
 
         </template>
     </div>
-
 </div>
-
-
-
         </div>
-
     </div>
-
 </section>
-
 </body>
 </html>

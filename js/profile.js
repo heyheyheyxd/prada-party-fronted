@@ -211,6 +211,9 @@ window.profilePage = function () {
 
             this.showToast("Данные успешно сохранены");
         },
+        goToReset() {
+            window.location.href = "reset.html";
+        },
 
         logout() {
             const pb = new PocketBase('https://prada-party.onrender.com');
