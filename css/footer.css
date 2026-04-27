@@ -10,6 +10,9 @@
     justify-content: space-between;
     gap: 60px;
     flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    
 }
 
 .footer-column h4 {
@@ -66,3 +69,39 @@
     color: #777;
     font-size: 14px;
 }
+.payments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payments-row {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;        
+    align-items: center;
+}
+
+.pay-icon {
+    height: 40px;      
+    width: auto;
+    object-fit: contain;
+    opacity: 0.9;
+    transition: 0.2s;
+}
+
+.pay-icon:hover {
+    opacity: 1;
+}
+.visa-fix {
+    height: 40px;       
+}
+.footer-philosophy {
+    max-width: 320px;
+    text-align: left;
+    color: #aaa;
+    line-height: 1.6;
+}
+
+
+
