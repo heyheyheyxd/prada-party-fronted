@@ -22,7 +22,7 @@ function shoesPage() {
             const input = document.getElementById("globalSearchInput");
             if (input) input.value = "";
 
-            this.updatePriceBar();
+            this.$nextTick(() => this.updatePriceBar());
         },
 
         pluralize(count) {
@@ -36,11 +36,38 @@ function shoesPage() {
 
         applyFilters() {
 
-            if (this.priceMin > 200000) this.priceMin = 200000;
-            if (this.priceMax > 200000) this.priceMax = 200000;
+            const emptyMin = this.priceMin === "" || this.priceMin == null || this.priceMin == 0;
+            const emptyMax = this.priceMax === "" || this.priceMax == null || this.priceMax == 200000;
+
+            const sortingActive = this.sortBy === "price_asc" || this.sortBy === "price_desc";
+
+            if (
+                emptyMin &&
+                emptyMax &&
+                this.query.trim() === "" &&
+                this.sortBy === ""     // сортировка выключена
+            ) {
+                this.priceMin = 0;
+                this.priceMax = 200000;
+
+                let result = [...this.allItems]; 
+
+                this.items = result;
+                this.searchMessage = "";
+                this.noResults = false;
+
+                this.$nextTick(() => this.updatePriceBar());
+                return;
+            }
+
+            if (this.priceMin === "" || this.priceMin == null) this.priceMin = 0;
+            if (this.priceMax === "" || this.priceMax == null) this.priceMax = 200000;
 
             if (this.priceMin < 0) this.priceMin = 0;
             if (this.priceMax < 0) this.priceMax = 0;
+
+            if (this.priceMin > 200000) this.priceMin = 200000;
+            if (this.priceMax > 200000) this.priceMax = 200000;
 
             if (this.priceMin > this.priceMax) {
                 this.priceMin = this.priceMax;
@@ -48,6 +75,7 @@ function shoesPage() {
 
             let result = [...this.allItems];
 
+            // Поиск
             const q = this.query.trim().toLowerCase();
             if (q !== "") {
                 result = result.filter(item =>
@@ -56,10 +84,12 @@ function shoesPage() {
                 );
             }
 
+            // Цена
             result = result.filter(item =>
                 item.price >= this.priceMin && item.price <= this.priceMax
             );
 
+            // Сортировка
             if (this.sortBy === "price_asc") {
                 result.sort((a, b) => a.price - b.price);
             }
@@ -67,21 +97,18 @@ function shoesPage() {
                 result.sort((a, b) => b.price - a.price);
             }
 
-            if (this.priceMin === 0 && this.priceMax === 200000 && this.query.trim() === "") {
-    
-                this.searchMessage = "";
-                this.noResults = false;
-                this.items = result;
-                 return;
-            }
-
-            if (result.length === 0) {
-                this.noResults = true;
-                this.searchMessage = "По вашему запросу ничего не найдено";
+            if (!sortingActive) {
+                if (result.length === 0) {
+                    this.noResults = true;
+                    this.searchMessage = "По вашему запросу ничего не найдено";
+                } else {
+                    this.noResults = false;
+                    const count = result.length;
+                    this.searchMessage = `Найдено: ${count} ${this.pluralize(count)}`;
+                }
             } else {
                 this.noResults = false;
-                const count = result.length;
-                this.searchMessage = `Найдено: ${count} ${this.pluralize(count)}`;
+                this.searchMessage = "";
             }
 
             this.items = result;
@@ -89,11 +116,15 @@ function shoesPage() {
         },
 
         syncPriceRange(which) {
-            if (this.priceMin > 200000) this.priceMin = 200000;
-            if (this.priceMax > 200000) this.priceMax = 200000;
+
+            if (this.priceMin === "" || this.priceMin == null) this.priceMin = 0;
+            if (this.priceMax === "" || this.priceMax == null) this.priceMax = 200000;
 
             if (this.priceMin < 0) this.priceMin = 0;
             if (this.priceMax < 0) this.priceMax = 0;
+
+            if (this.priceMin > 200000) this.priceMin = 200000;
+            if (this.priceMax > 200000) this.priceMax = 200000;
 
             if (which === "min" && this.priceMin > this.priceMax) {
                 this.priceMin = this.priceMax;
