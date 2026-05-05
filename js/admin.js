@@ -95,7 +95,7 @@ function adminPanel() {
 
 
         async checkAdmin() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 window.location.href = "login.html";
@@ -169,7 +169,7 @@ function adminPanel() {
         },
 
         async confirmDelete() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             await pb.collection("users").delete(this.pendingDeleteId);
 
@@ -182,7 +182,7 @@ function adminPanel() {
 
 
         async loadUsersTable() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             this.users = await pb.collection("users").getFullList({
                 sort: "-created"
@@ -218,7 +218,7 @@ function adminPanel() {
                 html += `
                     <tr>
                         <td><input type="radio" name="selectedUser" value="${u.id}"></td>
-                        <td>${u.avatar ? `<img src="http://127.0.0.1:8090/api/files/users/${u.id}/${u.avatar}" class="avatar-img">` : ""}</td>
+                        <td>${u.avatar ? `<img src="https://prada-party.onrender.com/api/files/users/${u.id}/${u.avatar}" class="avatar-img">` : ""}</td>
                         <td>${u.first_name ?? ""}</td>
                         <td>${u.last_name ?? ""}</td>
                         <td>${u.phone ?? ""}</td>
@@ -284,7 +284,7 @@ function adminPanel() {
 
 
         async createUser() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!this.validateUser("create", false)) return;
 
@@ -326,7 +326,7 @@ function adminPanel() {
         },
 
         async updateUser() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!this.validateUser("edit", true)) return;
 
@@ -363,7 +363,7 @@ function adminPanel() {
         },
 
         logout() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
             pb.authStore.clear();
             window.location.href = "index.html";
         }

@@ -62,7 +62,7 @@ function resetForm() {
         },
 
         async changePassword() {
-            const pb = new PocketBase("http://127.0.0.1:8090"); 
+            const pb = new PocketBase("https://prada-party.onrender.com"); 
 
             // 1. Новый пароль отличается от старого
             if (this.oldPass === this.newPass) {

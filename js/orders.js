@@ -4,7 +4,7 @@ function ordersPage() {
         items: [],
 
         async init() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const params = new URLSearchParams(window.location.search);
             this.orderNumber = params.get("order");

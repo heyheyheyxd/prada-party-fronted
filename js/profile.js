@@ -21,7 +21,7 @@ window.profilePage = function () {
         },
 
         async init() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
 
             if (!pb.authStore.isValid) {
                 window.location.href = "login.html";
@@ -47,7 +47,7 @@ window.profilePage = function () {
             this.postal_code = user.postal_code != null ? String(user.postal_code) : "";
 
             this.avatar = user.avatar
-                ? `http://127.0.0.1:8090/api/files/users/${user.id}/${user.avatar}`
+                ? `https://prada-party.onrender.com/api/files/users/${user.id}/${user.avatar}`
                 : "../img/people.jpg";
 
             await this.loadOrders();
@@ -115,7 +115,7 @@ window.profilePage = function () {
         },
 
         async loadOrders() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
 
             try {
                 const list = await pb.collection("orders").getFullList({
@@ -154,7 +154,7 @@ window.profilePage = function () {
         },
 
         async saveInfo() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
 
 
             let digits = String(this.phone || "").replace(/\D/g, "");
@@ -213,7 +213,7 @@ window.profilePage = function () {
         },
 
         logout() {
-            const pb = new PocketBase('http://127.0.0.1:8090');
+            const pb = new PocketBase('https://prada-party.onrender.com');
             pb.authStore.clear();
             localStorage.removeItem("cart");
             window.dispatchEvent(new Event('cart-updated'));

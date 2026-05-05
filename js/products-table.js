@@ -61,7 +61,7 @@ function productsPanel() {
         },
 
         async checkAdmin() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!pb.authStore.isValid) {
                 window.location.href = "login.html";
@@ -103,7 +103,7 @@ function productsPanel() {
 
             list.forEach(p => {
                 const img = p.image?.length
-                    ? `<img src="http://127.0.0.1:8090/api/files/products/${p.id}/${p.image[0]}" class="avatar-img">`
+                    ? `<img src="https://prada-party.onrender.com/api/files/products/${p.id}/${p.image[0]}" class="avatar-img">`
                     : "";
 
                 const sizesText =
@@ -181,7 +181,7 @@ function productsPanel() {
 
         
         async loadProducts() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             this.products = await pb.collection("products").getFullList({
                 sort: "-created"
@@ -285,7 +285,7 @@ function productsPanel() {
         },
 
         async createProduct() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const validated = this.validateProduct("create", false);
             if (!validated) return;
@@ -362,7 +362,7 @@ function productsPanel() {
         },
 
         async updateProduct() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             const id = document.querySelector("#edit_id").value;
             if (!id) {
@@ -419,7 +419,7 @@ function productsPanel() {
         },
 
         async confirmDelete() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
 
             if (!this.pendingDeleteId) {
                 this.showToast("Нет выбранного товара для удаления");
@@ -436,7 +436,7 @@ function productsPanel() {
         },
 
         logout() {
-            const pb = new PocketBase("http://127.0.0.1:8090");
+            const pb = new PocketBase("https://prada-party.onrender.com");
             pb.authStore.clear();
             window.location.href = "index.html";
         }
