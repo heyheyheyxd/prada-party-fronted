@@ -13,5 +13,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-    }, 200); // ждём пока header подгрузится
+    }, 200); 
 });

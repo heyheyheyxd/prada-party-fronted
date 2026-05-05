@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель — Prada Party</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="js/admin.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body>
+
+<section class="admin-page" x-data="adminPanel()" x-init="checkAdmin()">
+
+    <div class="admin-header">
+        <h1 class="admin-title">Админ панель</h1>
+        <button @click="logout" class="logout-btn">Выйти </button>
+    </div>
+    <!-- Кнопки таблиц -->
+    <div class="admin-menu">
+        <button @click="loadTable('users')">Пользователи</button>
+        <button onclick="window.location.href='products-table.html'">Товары</button>
+        <button onclick="window.location.href='orders-table.html'">Заказы</button>
+
+    </div>
+    <!-- Панель действий -->
+    <div class="admin-actions" x-show="tableLoaded">
+        <button class="create-btn" @click="openCreate()">Создать пользователя</button>
+        <button class="edit-btn" @click="openEdit()">Редактировать</button>
+        <button class="delete-btn" @click="askDelete()">Удалить</button>
+<input 
+    type="text" 
+    placeholder="Поиск по всем данным..."
+    oninput="window.adminSearchHandler(this.value)"
+    onkeydown="window.adminSearchEnter(event)"
+>
+
+
+    </div>
+
+    <!-- Таблица -->
+    <div class="admin-content" x-html="tableHtml"></div>
+
+    <!-- МОДАЛКА СОЗДАНИЯ -->
+    <dialog id="createModal" class="modal">
+        <h3>Создать пользователя</h3>
+
+        <div class="modal-error" id="create_error"></div>
+
+        <label>Email*</label>
+        <input id="create_email" type="email">
+
+        <label>Пароль*</label>
+        <input id="create_password" type="password">
+
+        <label>Аватар</label>
+        <input id="create_avatar" type="file">
+
+        <label>Имя</label>
+        <input id="create_first_name">
+
+        <label>Фамилия</label>
+        <input id="create_last_name">
+
+        <label>Телефон</label>
+        <input id="create_phone" @input="formatPhone('create')">
+
+        <label>Адрес</label>
+        <input id="create_address">
+
+        <label>Почтовый индекс</label>
+        <input id="create_postal_code" @input="formatPostal('create')">
+
+        <label>Дата рождения</label>
+        <input id="create_birthdate" type="date">
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="createUser()">Создать</button>
+            <button class="cancel-btn" @click="closeCreateModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <!-- МОДАЛКА РЕДАКТИРОВАНИЯ -->
+    <dialog id="editModal" class="modal">
+        <h3>Редактировать пользователя</h3>
+        <div class="modal-error" id="edit_error"></div>
+
+        <input id="edit_id" type="hidden">
+
+        <label>Имя</label>
+        <input id="edit_first_name">
+
+        <label>Фамилия</label>
+        <input id="edit_last_name">
+
+        <label>Телефон</label>
+        <input id="edit_phone" @input="formatPhone('edit')">
+
+        <label>Адрес</label>
+        <input id="edit_address">
+
+        <label>Почтовый индекс</label>
+        <input id="edit_postal_code" @input="formatPostal('edit')">
+
+        <label>Дата рождения</label>
+        <input id="edit_birthdate" type="date">
+
+        <label>Аватар</label>
+        <input id="edit_avatar" type="file">
+
+        <label>Админ</label>
+        <input id="edit_is_admin" type="checkbox">
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="updateUser()">Сохранить</button>
+            <button class="cancel-btn" @click="closeEditModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <!-- КАСТОМНОЕ ПРЕДУПРЕЖДЕНИЕ -->
+    <div id="confirmDelete" class="confirm-overlay" style="display:none;">
+        <div class="confirm-box">
+            <h3>Удалить пользователя?</h3>
+            <div class="confirm-buttons">
+                <button class="confirm-yes" @click="confirmDelete()">Удалить</button>
+                <button class="confirm-no" @click="cancelDelete()">Отмена</button>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<div id="toast-container"></div>
+
+</body>
+</html>

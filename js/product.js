@@ -29,7 +29,7 @@ function productPage() {
     },
 
     generateSizeGuide() {
-        // Если обувь
+        
         if (this.product.category === "shoes") {
             this.sizeGuideData = this.sizes.map(size => ({
                 intl: size,
@@ -38,7 +38,7 @@ function productPage() {
             return;
         }
 
-        // Если одежда
+        
         this.sizeGuideData = this.sizes.map(size => ({
             intl: size,
             ru: this.convertClothingSize(size)
@@ -92,7 +92,7 @@ function productPage() {
 
     // ЗАГРУЗКА ТОВАРА
     async loadProduct() {
-      const pb = new PocketBase("https://prada-party.onrender.com");
+      const pb = new PocketBase("http://127.0.0.1:8090");
 
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
@@ -130,7 +130,7 @@ function productPage() {
 
     // ДОБАВИТЬ В КОРЗИНУ
     async addToCart() {
-        const pb = new PocketBase("https://prada-party.onrender.com");
+        const pb = new PocketBase("http://127.0.0.1:8090");
 
         if (!pb.authStore.isValid) {
             this.showToast("Войдите в аккаунт");
@@ -232,7 +232,7 @@ function productPage() {
 
     // ДОБАВИТЬ В ИЗБРАННОЕ
     async addToWishlist() {
-        const pb = new PocketBase("https://prada-party.onrender.com");
+        const pb = new PocketBase("http://127.0.0.1:8090");
 
         if (!pb.authStore.isValid) {
             this.showToast("Войдите в аккаунт");

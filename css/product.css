@@ -416,7 +416,6 @@
     font-weight: 600;
 }
 
-/* Чередование строк */
 .sg-table tbody tr:nth-child(odd) {
     background: #fff;
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель — Заказы</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="js/orders-table.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body>
+
+<div id="toast-container"></div>
+
+<section class="admin-page" x-data="ordersPanel()" x-init="checkAdmin()">
+
+    <div class="admin-header">
+        <h1 class="admin-title">Админ панель</h1>
+        <button @click="logout" class="logout-btn">Выйти</button>
+    </div>
+
+    <div class="admin-menu">
+        <button onclick="window.location.href='admin.html'">Пользователи</button>
+        <button onclick="window.location.href='products-table.html'">Товары</button>
+        <button onclick="window.location.href='orders-table.html'">Заказы</button>
+    </div>
+
+    <div class="admin-actions" x-show="tableLoaded">
+        <button class="create-btn" @click="openCreate()">Создать заказ</button>
+        <button class="edit-btn" @click="openEdit()">Редактировать</button>
+        <button class="delete-btn" @click="askDelete()">Удалить</button>
+
+        <input 
+            type="text" 
+            placeholder="Поиск по заказам..."
+            oninput="window.ordersSearchHandler(this.value)"
+            onkeydown="window.ordersSearchEnter(event)"
+        >
+    </div>
+
+    <div class="admin-content" x-html="tableHtml"></div>
+
+    <!-- CREATE MODAL -->
+    <dialog id="createModal" class="modal">
+        <h3>Создать заказ</h3>
+
+        <div class="modal-error" id="create_error" style="display:none;"></div>
+
+        <label>Пользователь (ID)*</label>
+        <input id="create_user" required>
+
+        <h4>Товары</h4>
+        <div id="create_items_block"></div>
+        <button type="button" class="small-btn" onclick="window.ordersPanelInstance.addCreateItemRow()">+ Добавить товар</button>
+
+        <label>Сумма заказа (₽)*</label>
+        <input id="create_total_price" type="number" required readonly>
+
+        <label>Номер заказа*</label>
+        <input id="create_order_number" required>
+
+        <label>Статус*</label>
+        <select id="create_status" required>
+            <option value="">— выберите статус —</option>
+            <option value="Создан">Создан</option>
+            <option value="В пути">В пути</option>
+            <option value="Доставлен">Доставлен</option>
+        </select>
+
+        <label>Дата доставки*</label>
+        <input id="create_delivery_date" type="date" required>
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="createOrder()">Создать</button>
+            <button class="cancel-btn" @click="closeCreateModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <!-- EDIT MODAL -->
+    <dialog id="editModal" class="modal">
+        <h3>Редактировать заказ</h3>
+
+        <div class="modal-error" id="edit_error" style="display:none;"></div>
+
+        <input id="edit_id" type="hidden">
+
+        <label>Пользователь (ID)*</label>
+        <input id="edit_user" required>
+
+        <h4>Товары</h4>
+        <div id="edit_items_block"></div>
+        
+        <button type="button" class="small-btn" onclick="window.ordersPanelInstance.addEditItemRow()">+ Добавить товар</button>
+
+        <label>Сумма заказа (₽)*</label>
+        <input id="edit_total_price" type="number" required readonly>
+
+        <label>Номер заказа*</label>
+        <input id="edit_order_number" required>
+
+        <label>Статус*</label>
+        <select id="edit_status" required>
+            <option value="">— выберите статус —</option>
+            <option value="Создан">Создан</option>
+            <option value="В пути">В пути</option>
+            <option value="Доставлен">Доставлен</option>
+        </select>
+
+        <label>Дата доставки*</label>
+        <input id="edit_delivery_date" type="date" required>
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="updateOrder()">Сохранить</button>
+            <button class="cancel-btn" @click="closeEditModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <div id="confirmDelete" class="confirm-overlay" style="display:none;">
+        <div class="confirm-box">
+            <h3>Удалить заказ?</h3>
+            <div class="confirm-buttons">
+                <button class="confirm-yes" @click="confirmDelete()">Удалить</button>
+                <button class="confirm-no" @click="cancelDelete()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+</body>
+</html>

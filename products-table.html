@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель — Товары</title>
+
+    <link rel="stylesheet" href="css/admin.css">
+
+    <script src="https://unpkg.com/pocketbase/dist/pocketbase.umd.js"></script>
+    <script src="js/products-table.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+
+<body>
+
+<section class="admin-page" x-data="productsPanel()" x-init="checkAdmin()">
+
+    <div class="admin-header">
+        <h1 class="admin-title">Админ панель</h1>
+        <button @click="logout" class="logout-btn">Выйти</button>
+    </div>
+
+    <div class="admin-menu">
+        <button onclick="window.location.href='admin.html'">Пользователи</button>
+        <button onclick="window.location.href='products-table.html'">Товары</button>
+        <button onclick="window.location.href='orders-table.html'">Заказы</button>
+    </div>
+
+<div class="admin-actions" x-show="tableLoaded">
+    <button class="create-btn" @click="openCreate()">Создать товар</button>
+    <button class="edit-btn" @click="openEdit()">Редактировать</button>
+    <button class="delete-btn" @click="askDelete()">Удалить</button>
+
+<input 
+    type="text" 
+    placeholder="Поиск по всем данным..."
+    oninput="window.productsSearchHandler(this.value)"
+    onkeydown="window.productsSearchEnter(event)"
+>
+
+</div>
+
+
+    <div class="admin-content" x-html="tableHtml"></div>
+
+    <!-- CREATE MODAL -->
+    <dialog id="createModal" class="modal">
+        <h3>Создать товар</h3>
+
+        <div class="modal-error" id="create_error"></div>
+
+        <label>Название*</label>
+        <input id="create_title">
+
+        <label>Бренд*</label>
+        <input id="create_brand">
+
+        <label>Цена* (до 200000)</label>
+        <input id="create_price" type="number"
+               onkeydown="return !['e','E','+','-','.'].includes(event.key);">
+
+        <label>Категория*</label>
+        <select id="create_category" onchange="window.productsPanelInstance.onCategoryChange('create')">
+            <option value="">— выберите категорию —</option>
+            <option value="clothes">Одежда</option>
+            <option value="shoes">Обувь</option>
+            <option value="accessories">Аксессуары</option>
+        </select>
+
+        <div id="create_sizes_block">
+            <label>Размеры* (каждый с новой строки)</label>
+            <textarea id="create_sizes" placeholder="38
+39
+40"></textarea>
+        </div>
+
+        <label>Фото 1 (multiple)*</label>
+        <input id="create_image" type="file" multiple>
+
+        <label>Фото 2 (single)</label>
+        <input id="create_image2" type="file">
+
+        <label>Пол*</label>
+        <select id="create_gender">
+            <option value="">— выберите пол —</option>
+            <option value="men">Мужской</option>
+            <option value="women">Женский</option>
+            <option value="unisex">Унисекс</option>
+        </select>
+
+        <label>Популярный</label>
+        <input id="create_popular" type="checkbox">
+
+        <label>В наличии</label>
+        <input id="create_in_stock" type="checkbox">
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="createProduct()">Создать</button>
+            <button class="cancel-btn" @click="closeCreateModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <!-- EDIT MODAL -->
+    <dialog id="editModal" class="modal">
+        <h3>Редактировать товар</h3>
+
+        <div class="modal-error" id="edit_error"></div>
+
+        <input id="edit_id" type="hidden">
+
+        <label>Название*</label>
+        <input id="edit_title">
+
+        <label>Бренд*</label>
+        <input id="edit_brand">
+
+        <label>Цена* (до 200000)</label>
+        <input id="edit_price" type="number"
+               onkeydown="return !['e','E','+','-','.'].includes(event.key);">
+
+        <label>Категория*</label>
+        <select id="edit_category" onchange="window.productsPanelInstance.onCategoryChange('edit')">
+            <option value="">— выберите категорию —</option>
+            <option value="clothes">Одежда</option>
+            <option value="shoes">Обувь</option>
+            <option value="accessories">Аксессуары</option>
+        </select>
+
+        <div id="edit_sizes_block">
+            <label>Размеры* (каждый с новой строки)</label>
+            <textarea id="edit_sizes" placeholder="38
+39
+40"></textarea>
+        </div>
+
+        <label>Фото 1 (multiple)</label>
+        <input id="edit_image" type="file" multiple>
+
+        <label>Фото 2 (single)</label>
+        <input id="edit_image2" type="file">
+
+        <label>Пол*</label>
+        <select id="edit_gender">
+            <option value="">— выберите пол —</option>
+            <option value="men">Мужской</option>
+            <option value="women">Женский</option>
+            <option value="unisex">Унисекс</option>
+        </select>
+
+        <label>Популярный</label>
+        <input id="edit_popular" type="checkbox">
+
+        <label>В наличии</label>
+        <input id="edit_in_stock" type="checkbox">
+
+        <div class="modal-actions">
+            <button class="save-btn" @click="updateProduct()">Сохранить</button>
+            <button class="cancel-btn" @click="closeEditModal()">Отмена</button>
+        </div>
+    </dialog>
+
+    <!-- DELETE CONFIRM -->
+    <div id="confirmDelete" class="confirm-overlay" style="display:none;">
+        <div class="confirm-box">
+            <h3>Удалить товар?</h3>
+            <div class="confirm-buttons">
+                <button class="confirm-yes" @click="confirmDelete()">Удалить</button>
+                <button class="confirm-no" @click="cancelDelete()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<div id="toast-container"></div>
+
+</body>
+</html>

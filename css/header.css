@@ -148,7 +148,7 @@ header .user-avatar img {
     color: #666;
     pointer-events: none;
 }
-/* Иконки корзины и избранного (Farfetch-style) */
+
 .user-and-icons {
     display: flex;
     align-items: center;
@@ -193,7 +193,6 @@ header .user-avatar img {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Профиль рядом с иконками */
 .user-menu {
     display: flex;
     align-items: center;
@@ -219,11 +218,11 @@ header .user-avatar img {
         padding: 10px 20px;
     }
     .nav-links {
-        display: none; /* скрываем меню */
+        display: none; 
     }
     
     .burger {
-        display: block; /* показываем бургер */
+        display: block; 
     }
 
     .header-right {

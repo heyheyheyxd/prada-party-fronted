@@ -9,16 +9,16 @@ function userMenu() {
         wishlistCount: 0,
 
         async init() {
-            const pb = new PocketBase('https://prada-party.onrender.com');
+            const pb = new PocketBase('http://127.0.0.1:8090');
 
             this.isLoggedIn = pb.authStore.isValid;
 
-            // 1. Если пользователь авторизован — загружаем актуальные данные
+            
             if (this.isLoggedIn && pb.authStore.model) {
                 let user;
 
                 try {
-                    //  Загружаем актуальные данные пользователя из PB
+                    
                     user = await pb.collection("users").getOne(pb.authStore.model.id);
                 } catch (err) {
                     console.error("Ошибка загрузки пользователя:", err);
@@ -28,7 +28,7 @@ function userMenu() {
                 this.email = user.email;
                 this.first_name = user.first_name || "";
                 this.avatar = user.avatar
-                ? `https://prada-party.onrender.com/api/files/users/${user.id}/${user.avatar}`
+                ? `http://127.0.0.1:8090/api/files/users/${user.id}/${user.avatar}`
                 : "img/people.jpg";
 
                 //  Если есть имя — показываем имя, иначе email
@@ -36,15 +36,15 @@ function userMenu() {
                     ? this.first_name
                     : this.email;
 
-                // 2. Синхронизируем wishlist/cart из PB
+                
                 await this.syncWishlistFromPB();
                 await this.syncCartFromPB();
             }
-            // 3. Обновляем счётчики
+            
             this.updateCartCount();
             this.updateWishlistCount();
 
-            // 4. Слушаем события
+           
             window.addEventListener('storage', () => {
                 this.updateCartCount();
                 this.updateWishlistCount();
@@ -56,7 +56,7 @@ function userMenu() {
 
         // СИНХРОНИЗАЦИЯ WISHLIST
         async syncWishlistFromPB() {
-            const pb = new PocketBase("https://prada-party.onrender.com");
+            const pb = new PocketBase("http://127.0.0.1:8090");
 
             if (!pb.authStore.isValid) return;
 
@@ -83,7 +83,7 @@ function userMenu() {
 
         // СИНХРОНИЗАЦИЯ CART
         async syncCartFromPB() {
-            const pb = new PocketBase("https://prada-party.onrender.com");
+            const pb = new PocketBase("http://127.0.0.1:8090");
 
             if (!pb.authStore.isValid) return;
 
@@ -121,7 +121,7 @@ function userMenu() {
         },
         // ВЫХОД
         logout() {
-            const pb = new PocketBase('https://prada-party.onrender.com');
+            const pb = new PocketBase('http://127.0.0.1:8090');
             localStorage.removeItem("wishlist");
             localStorage.removeItem("cart");
 

@@ -10,7 +10,7 @@ function shoesPage() {
         sortBy: "",
 
         async loadShoes() {
-            const pb = new PocketBase("https://prada-party.onrender.com");
+            const pb = new PocketBase("http://127.0.0.1:8090");
 
             const records = await pb.collection("products").getFullList({
                 filter: 'gender = "women"'
@@ -45,7 +45,7 @@ function shoesPage() {
                 emptyMin &&
                 emptyMax &&
                 this.query.trim() === "" &&
-                this.sortBy === ""     // сортировка выключена
+                this.sortBy === ""     
             ) {
                 this.priceMin = 0;
                 this.priceMax = 200000;
@@ -171,10 +171,10 @@ function shoesPage() {
                 title: item.title,
                 brand: item.brand,
                 price: item.price,
-                image: `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
+                image: `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`,
                 image2: item.image2
-                    ? `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image2}`
-                    : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`
+                    ? `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image2}`
+                    : `http://127.0.0.1:8090/api/files/products/${item.id}/${item.image}`
             };
         }
     }

@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<!-- Контейнер для тостов -->
+
 <div id="toast-container"></div>
 
 <script>
@@ -75,7 +75,7 @@ function registerForm() {
                 this.showToast("Пароль должен содержать только английские буквы");
                 return;
             }
-            const pb = new PocketBase('https://prada-party.onrender.com');
+            const pb = new PocketBase('http://127.0.0.1:8090');
 
             try {
                 await pb.collection('users').create({

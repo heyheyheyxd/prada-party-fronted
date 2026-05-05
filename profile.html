@@ -62,14 +62,14 @@
                 <input type="text" x-model="last_name">
                 
                 <label>Телефон</label>
-                <input type="text" x-model="phone" id="phone-input" maxlength="16">
-
+                <input x-model="phone" @input="formatPhoneInput">
+                
                 <label>Адрес</label>
                 <input type="text" x-model="address">
 
                 
                 <label>Почтовый индекс</label>
-                <input type="text" x-model="postal_code" id="postal-input" maxlength="6">
+                <input x-model="postal_code" @input="formatPostalInput">
 
                 <label>Дата рождения</label>
                 <input type="date" x-model="birthdate">

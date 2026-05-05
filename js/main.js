@@ -27,23 +27,23 @@ async function loadPopularProducts() {
     const container = document.getElementById("popular-products");
     if (!container) return;
 
-    const pb = new PocketBase("https://prada-party.onrender.com");
+    const pb = new PocketBase("http://127.0.0.1:8090");
 
-    // 1. Получаем все популярные товары в наличии
+    
     const products = await pb.collection("products").getFullList({
         filter: 'popular = true && in_stock = true'
     });
 
-    // 2. Перемешиваем массив
+    
     for (let i = products.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [products[i], products[j]] = [products[j], products[i]];
     }
 
-    // 3. Берём первые 4
+    
     const selected = products.slice(0, 4);
 
-    // 4. Рендерим
+    
     container.innerHTML = "";
 
     selected.forEach(product => {

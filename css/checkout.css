@@ -39,7 +39,6 @@
     gap: 40px;
 }
 
-/* Левая колонка */
 
 .checkout-left {
     display: flex;
@@ -104,7 +103,7 @@
     font-size: 14px;
 }
 
-/* Оплата */
+
 
 .payment-options {
     display: flex;
@@ -127,7 +126,7 @@
     cursor: pointer;
 }
 
-/* Товары */
+
 
 .checkout-items {
     display: flex;
@@ -177,7 +176,7 @@
     color: #555;
 }
 
-/* Правая колонка */
+
 
 .checkout-summary {
     border: 1px solid #eee;
@@ -234,7 +233,7 @@
     color: #000;
     text-decoration: underline;
 }
-/* Блок оплаты */
+
 .payment-block h2 {
     margin-bottom: 14px;
 }
