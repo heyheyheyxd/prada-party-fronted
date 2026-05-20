@@ -94,7 +94,6 @@ function productsPanel() {
                             <th>category</th>
                             <th>gender</th>
                             <th>sizes</th>
-                            <th>popular</th>
                             <th>in_stock</th>
                         </tr>
                     </thead>
@@ -121,7 +120,6 @@ function productsPanel() {
                         <td>${p.category}</td>
                         <td>${p.gender}</td>
                         <td>${sizesText}</td>
-                        <td>${p.popular ? "Да" : "Нет"}</td>
                         <td>${p.in_stock ? "Да" : "Нет"}</td>
                     </tr>
                 `;
@@ -157,7 +155,6 @@ function productsPanel() {
                     p.category,
                     p.gender,
                     Array.isArray(p.sizes) ? p.sizes.join(", ") : "",
-                    p.popular ? "да" : "нет",
                     p.in_stock ? "да" : "нет"
                 ]
                 .filter(Boolean)
@@ -296,7 +293,6 @@ function productsPanel() {
             form.append("price", String(validated.price));
             form.append("category", validated.category);
             form.append("gender", validated.gender);
-            form.append("popular", document.querySelector("#create_popular").checked);
             form.append("in_stock", document.querySelector("#create_in_stock").checked);
 
             if (validated.category !== "accessories") {
@@ -338,7 +334,6 @@ function productsPanel() {
             document.querySelector("#edit_price").value = p.price ?? "";
             document.querySelector("#edit_category").value = p.category ?? "";
             document.querySelector("#edit_gender").value = p.gender ?? "";
-            document.querySelector("#edit_popular").checked = !!p.popular;
             document.querySelector("#edit_in_stock").checked = !!p.in_stock;
 
             const sizesBlock = document.querySelector("#edit_sizes_block");
@@ -379,7 +374,6 @@ function productsPanel() {
             form.append("price", String(validated.price));
             form.append("category", validated.category);
             form.append("gender", validated.gender);
-            form.append("popular", document.querySelector("#edit_popular").checked);
             form.append("in_stock", document.querySelector("#edit_in_stock").checked);
 
             if (validated.category !== "accessories") {
