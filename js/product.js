@@ -90,6 +90,42 @@ function productPage() {
         }, 3000);
     },
 
+    savePendingAction(actionType) {
+        const size = this.product.category === 'accessories'
+            ? ""
+            : (this.selectedSize || "");
+
+        localStorage.setItem("pendingAction", JSON.stringify({
+            type: actionType,
+            productId: this.product.id,
+            size
+        }));
+    },
+
+    async processPendingActionIfNeeded() {
+        const pending = JSON.parse(localStorage.getItem("pendingAction") || "null");
+
+        if (!pending || pending.productId !== this.product.id) {
+            return;
+        }
+
+        const pb = new PocketBase("https://prada-party.onrender.com");
+
+        if (!pb.authStore.isValid) {
+            return;
+        }
+
+        localStorage.removeItem("pendingAction");
+
+        if (pending.type === "addToCart") {
+            this.selectedSize = pending.size || this.selectedSize;
+            await this.addToCart({ skipAuthRedirect: true });
+        } else if (pending.type === "addToWishlist") {
+            this.selectedSize = pending.size || this.selectedSize;
+            await this.addToWishlist({ skipAuthRedirect: true });
+        }
+    },
+
     // ЗАГРУЗКА ТОВАРА
     async loadProduct() {
       const pb = new PocketBase("https://prada-party.onrender.com");
@@ -120,6 +156,8 @@ function productPage() {
 
         this.sizes = Array.isArray(item.sizes) ? item.sizes : [];
 
+        await this.processPendingActionIfNeeded();
+
       } catch (err) {
         console.error("Ошибка загрузки товара:", err);
         this.error = err.status
@@ -129,13 +167,17 @@ function productPage() {
     },
 
     // ДОБАВИТЬ В КОРЗИНУ
-    async addToCart() {
+    async addToCart(options = {}) {
         const pb = new PocketBase("https://prada-party.onrender.com");
+        const { skipAuthRedirect = false } = options;
 
         if (!pb.authStore.isValid) {
-            this.showToast("Войдите в аккаунт");
-            localStorage.setItem("redirectAfterLogin", window.location.href);
-            window.location.href = "login.html";
+            if (!skipAuthRedirect) {
+                this.savePendingAction("addToCart");
+                this.showToast("Войдите в аккаунт");
+                localStorage.setItem("redirectAfterLogin", window.location.href);
+                window.location.href = "login.html";
+            }
             return;
         }
 
@@ -231,13 +273,17 @@ function productPage() {
     },
 
     // ДОБАВИТЬ В ИЗБРАННОЕ
-    async addToWishlist() {
+    async addToWishlist(options = {}) {
         const pb = new PocketBase("https://prada-party.onrender.com");
+        const { skipAuthRedirect = false } = options;
 
         if (!pb.authStore.isValid) {
-            this.showToast("Войдите в аккаунт");
-            localStorage.setItem("redirectAfterLogin", window.location.href);
-            window.location.href = "login.html";
+            if (!skipAuthRedirect) {
+                this.savePendingAction("addToWishlist");
+                this.showToast("Войдите в аккаунт");
+                localStorage.setItem("redirectAfterLogin", window.location.href);
+                window.location.href = "login.html";
+            }
             return;
         }
 

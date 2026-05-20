@@ -55,6 +55,14 @@ function clothesPage() {
 
                 if (this.filterType !== "") {
                     result = result.filter(item => item.category === this.filterType);
+
+                    if (result.length === 0) {
+                        this.items = [];
+                        this.noResults = true;
+                        this.searchMessage = "По вашему запросу ничего не найдено";
+                        this.$nextTick(() => this.updatePriceBar());
+                        return;
+                    }
                 }
 
                 this.items = result;

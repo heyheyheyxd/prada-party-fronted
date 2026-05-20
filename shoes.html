@@ -31,9 +31,16 @@
 
     <div class="shoes-filters">
 
-        <div class="shoes-price-filter">
+        <div class="filter-group">
+            <button @click="filterType = ''; applyFilters()" :class="{active: filterType === ''}">Все</button>
+            <button @click="filterType = 'clothes'; applyFilters()" :class="{active: filterType === 'clothes'}">Одежда</button>
+            <button @click="filterType = 'shoes'; applyFilters()" :class="{active: filterType === 'shoes'}">Обувь</button>
+            <button @click="filterType = 'accessories'; applyFilters()" :class="{active: filterType === 'accessories'}">Аксессуары</button>
+        </div>
 
-            <div class="shoes-price-inputs">
+        <div class="price-filter">
+
+            <div class="price-inputs">
                 <div>
                     <label>От</label>
                     <input type="number" min="0" max="200000"
@@ -49,9 +56,9 @@
                 </div>
             </div>
 
-            <div class="shoes-price-slider" x-ref="priceSlider">
-                <div class="shoes-price-slider-track"></div>
-                <div class="shoes-price-slider-range" x-ref="priceRange"></div>
+            <div class="price-slider" x-ref="priceSlider">
+                <div class="price-slider-track"></div>
+                <div class="price-slider-range" x-ref="priceRange"></div>
 
                 <input type="range" min="0" max="200000" step="100"
                        x-model.number="priceMin"
@@ -64,7 +71,7 @@
 
         </div>
 
-        <div class="shoes-sort-group">
+        <div class="sort-group">
             <select x-model="sortBy" @change="applyFilters()">
                 <option value="">Сортировка</option>
                 <option value="price_asc">Цена: по возрастанию</option>

@@ -5,6 +5,7 @@ function shoesPage() {
         query: "",
         searchMessage: "",
         noResults: false,
+        filterType: "",
         priceMin: 0,
         priceMax: 200000,
         sortBy: "",
@@ -52,6 +53,18 @@ function shoesPage() {
 
                 let result = [...this.allItems]; 
 
+                if (this.filterType !== "") {
+                    result = result.filter(item => item.category === this.filterType);
+
+                    if (result.length === 0) {
+                        this.items = [];
+                        this.noResults = true;
+                        this.searchMessage = "По вашему запросу ничего не найдено";
+                        this.$nextTick(() => this.updatePriceBar());
+                        return;
+                    }
+                }
+
                 this.items = result;
                 this.searchMessage = "";
                 this.noResults = false;
@@ -82,6 +95,11 @@ function shoesPage() {
                     item.title.toLowerCase().includes(q) ||
                     item.brand.toLowerCase().includes(q)
                 );
+            }
+
+            // Категория
+            if (this.filterType !== "") {
+                result = result.filter(item => item.category === this.filterType);
             }
 
             // Цена
@@ -174,7 +192,9 @@ function shoesPage() {
                 image: `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
                 image2: item.image2
                     ? `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image2}`
-                    : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`
+                    : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
+                link: `product.html?id=${item.id}`,
+                category: item.category
             };
         }
     }
