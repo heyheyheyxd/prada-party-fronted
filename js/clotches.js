@@ -5,6 +5,7 @@ function clothesPage() {
         query: "",
         searchMessage: "",
         noResults: false,
+        filterType: "",
         priceMin: 0,
         priceMax: 200000,
         sortBy: "",
@@ -50,7 +51,11 @@ function clothesPage() {
                 this.priceMin = 0;
                 this.priceMax = 200000;
 
-                let result = [...this.allItems]; 
+                let result = [...this.allItems];
+
+                if (this.filterType !== "") {
+                    result = result.filter(item => item.category === this.filterType);
+                }
 
                 this.items = result;
                 this.searchMessage = "";
@@ -83,6 +88,11 @@ function clothesPage() {
                     item.title.toLowerCase().includes(q) ||
                     item.brand.toLowerCase().includes(q)
                 );
+            }
+
+            // Категория
+            if (this.filterType !== "") {
+                result = result.filter(item => item.category === this.filterType);
             }
 
             // Цена
@@ -175,7 +185,8 @@ function clothesPage() {
                 image2: item.image2
                     ? `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image2}`
                     : `https://prada-party.onrender.com/api/files/products/${item.id}/${item.image}`,
-                link: `product.html?id=${item.id}`
+                link: `product.html?id=${item.id}`,
+                category: item.category
             };
         }
     }

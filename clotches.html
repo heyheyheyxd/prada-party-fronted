@@ -32,6 +32,13 @@
 
     <div class="clothes-filters">
 
+        <div class="filter-group">
+            <button @click="filterType = ''; applyFilters()" :class="{active: filterType === ''}">Все</button>
+            <button @click="filterType = 'clothes'; applyFilters()" :class="{active: filterType === 'clothes'}">Одежда</button>
+            <button @click="filterType = 'shoes'; applyFilters()" :class="{active: filterType === 'shoes'}">Обувь</button>
+            <button @click="filterType = 'accessories'; applyFilters()" :class="{active: filterType === 'accessories'}">Аксессуары</button>
+        </div>
+
         <div class="price-filter">
 
             <div class="price-inputs">

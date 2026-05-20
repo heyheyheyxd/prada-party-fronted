@@ -197,5 +197,28 @@
 .sort-group select:hover {
     border-color: #111;
 }
+.filter-group {
+    display: flex;
+    gap: 10px;
+}
 
+.filter-group button {
+    padding: 8px 18px;
+    background: #fff;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.25s ease;
+}
+
+.filter-group button:hover {
+    border-color: #111;
+}
+
+.filter-group button.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
 
