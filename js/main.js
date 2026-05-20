@@ -22,28 +22,56 @@ loadComponent("footer", "footer.html");
 
 
 
-// Популярные товары
+async function getTopPurchasedProductIds(limit = 4) {
+    const pb = new PocketBase("https://prada-party.onrender.com");
+    const orders = await pb.collection("orders").getFullList();
+
+    const counts = new Map();
+
+    orders.forEach(order => {
+        if (!Array.isArray(order.items)) return;
+
+        order.items.forEach(item => {
+            const productId = item.id || item.product;
+            if (!productId) return;
+
+            const quantity = Number(item.quantity ?? 1) || 1;
+            counts.set(productId, (counts.get(productId) || 0) + quantity);
+        });
+    });
+
+    return [...counts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([productId]) => productId);
+}
+
+// Популярные товары по числу покупок
 async function loadPopularProducts() {
     const container = document.getElementById("popular-products");
     if (!container) return;
 
     const pb = new PocketBase("https://prada-party.onrender.com");
+    const topIds = await getTopPurchasedProductIds(4);
 
-    
-    const products = await pb.collection("products").getFullList({
-        filter: 'popular = true && in_stock = true'
-    });
+    let products = [];
 
-    
-    for (let i = products.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [products[i], products[j]] = [products[j], products[i]];
+    if (topIds.length > 0) {
+        const filter = topIds.map(id => `id = "${id}"`).join(" || ");
+        products = await pb.collection("products").getFullList({
+            filter: `in_stock = true && (${filter})`
+        });
+        products.sort((a, b) => topIds.indexOf(a.id) - topIds.indexOf(b.id));
     }
 
-    
+    if (products.length === 0) {
+        products = await pb.collection("products").getFullList({
+            filter: 'popular = true && in_stock = true'
+        });
+    }
+
     const selected = products.slice(0, 4);
 
-    
     container.innerHTML = "";
 
     selected.forEach(product => {
@@ -65,7 +93,6 @@ async function loadPopularProducts() {
         `;
     });
 }
-
 
 
 document.addEventListener("DOMContentLoaded", () => {
