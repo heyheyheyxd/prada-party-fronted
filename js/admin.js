@@ -67,17 +67,15 @@ function adminPanel() {
             const password = document.querySelector(`#${prefix}_password`)?.value.trim();
 
 
-            if (!email) {
-                this.showModalError(prefix, "Введите email");
-                return false;
-            }
-
-            if (!/^\S+@\S+\.\S+$/.test(email)) {
-                this.showModalError(prefix, "Некорректный email");
-                return false;
-            }
-
             if (!isEdit) {
+                if (!email) {
+                    this.showModalError(prefix, "Введите email");
+                    return false;
+                }
+                if (!/^\S+@\S+\.\S+$/.test(email)) {
+                    this.showModalError(prefix, "Некорректный email");
+                    return false;
+                }
                 if (!password) {
                     this.showModalError(prefix, "Введите пароль");
                     return false;
