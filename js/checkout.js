@@ -200,30 +200,33 @@ function checkoutPage() {
             );
         },
 
-        async clearFullCart() {
+        async clearOrderedItems() {
             const pb = new PocketBase("https://prada-party.onrender.com");
 
-            if (!pb.authStore.isValid) {
-                localStorage.removeItem("cart");
-                window.dispatchEvent(new Event("cart-updated"));
-                return;
-            }
-
-            const userId = pb.authStore.model.id;
-
-            try {
-                const records = await pb.collection("cart").getFullList({
-                    filter: `user = "${userId}"`
-                });
-
-                for (const rec of records) {
-                    await pb.collection("cart").delete(rec.id);
+            // Удаляем заказанные товары из PocketBase
+            if (pb.authStore.isValid) {
+                try {
+                    for (const item of this.items) {
+                        if (item.cartRecordId) {
+                            await pb.collection("cart").delete(item.cartRecordId);
+                        }
+                    }
+                } catch (err) {
+                    console.error("Ошибка удаления заказанных товаров:", err);
                 }
-            } catch (err) {
-                console.error("Ошибка очистки корзины PB:", err);
             }
 
-            localStorage.removeItem("cart");
+            // Удаляем заказанные товары из локального хранилища
+            const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+            const orderedItemKeys = this.items.map(item => `${item.id}__${item.size || ""}`);
+            const remainingCart = localCart.filter(item => !orderedItemKeys.includes(`${item.id}__${item.size || ""}`));
+
+            if (remainingCart.length > 0) {
+                localStorage.setItem("cart", JSON.stringify(remainingCart));
+            } else {
+                localStorage.removeItem("cart");
+            }
+
             window.dispatchEvent(new Event("cart-updated"));
         },
 
@@ -263,7 +266,7 @@ function checkoutPage() {
 
                 this.showCenteredToast("Заказ успешно оформлен");
 
-                await this.clearFullCart();
+                await this.clearOrderedItems();
 
                 localStorage.removeItem("checkoutItems");
 
