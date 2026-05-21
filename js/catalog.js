@@ -9,6 +9,10 @@ function catalogPage() {
         sortBy: "",
         priceMin: 0,
         priceMax: 200000,
+        currentPage: 1,
+        itemsPerPage: 12,
+        totalPages: 1,
+        pagedItems: [],
 
         async loadAll() {
             const pb = new PocketBase("https://prada-party.onrender.com");
@@ -19,7 +23,10 @@ function catalogPage() {
             this.items = this.allItems;
 
             this.applySearchFromURL();
-            this.$nextTick(() => this.updatePriceBar());
+            this.$nextTick(() => {
+                this.updatePriceBar();
+                this.updatePaging();
+            });
         },
 
         applySearchFromURL() {
@@ -30,6 +37,18 @@ function catalogPage() {
                 this.query = q;
                 this.searchLocal();
             }
+        },
+
+        setPage(page) {
+            const target = Number(page);
+            if (target < 1 || target > this.totalPages) return;
+            this.currentPage = target;
+            this.updatePaging();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        pages() {
+            return Array.from({ length: this.totalPages }, (_, index) => index + 1);
         },
 
         pluralize(count) {
@@ -75,7 +94,10 @@ function catalogPage() {
                 this.searchMessage = "";
                 this.noResults = false;
 
-                this.$nextTick(() => this.updatePriceBar());
+                this.$nextTick(() => {
+                    this.updatePriceBar();
+                    this.updatePaging();
+                });
                 return;
             }
 
@@ -138,6 +160,17 @@ function catalogPage() {
 
             this.items = result;
             this.updatePriceBar();
+            this.updatePaging();
+        },
+
+        updatePaging() {
+            const visibleItems = Array.isArray(this.items) ? this.items : [];
+            this.totalPages = Math.max(1, Math.ceil(visibleItems.length / this.itemsPerPage));
+            if (this.currentPage > this.totalPages) {
+                this.currentPage = this.totalPages;
+            }
+            const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+            this.pagedItems = visibleItems.slice(startIndex, startIndex + this.itemsPerPage);
         },
 
         syncPriceRange(which) {

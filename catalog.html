@@ -94,7 +94,7 @@
 
     </div>
     <div class="catalog-grid" x-show="!noResults">
-        <template x-for="item in items" :key="item.id">
+        <template x-for="item in pagedItems" :key="item.id">
 
             <a :href="'product.html?id=' + item.id" class="catalog-card">
 
@@ -113,6 +113,30 @@
     </div>
 
 
+
+    <div class="catalog-pagination" x-show="totalPages > 1">
+        <button type="button"
+                class="pagination-control"
+                :disabled="currentPage === 1"
+                @click="setPage(currentPage - 1)">
+            <
+        </button>
+
+        <template x-for="page in pages()" :key="page">
+            <button type="button"
+                    class="pagination-page"
+                    :class="{active: currentPage === page}"
+                    @click="setPage(page)"
+                    x-text="page"></button>
+        </template>
+
+        <button type="button"
+                class="pagination-control"
+                :disabled="currentPage === totalPages"
+                @click="setPage(currentPage + 1)">
+            >
+        </button>
+    </div>
 
 </section>
 
