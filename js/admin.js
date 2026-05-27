@@ -60,6 +60,39 @@ function adminPanel() {
         },
 
 
+        formatPhone(prefix) {
+            const el = document.querySelector(`#${prefix}_phone`);
+            if (!el) return;
+            let digits = String(el.value || "").replace(/\D/g, "");
+
+            
+            if (digits.startsWith("8")) digits = digits.substring(1);
+
+            
+            if (digits.length > 10) digits = digits.substring(0, 10);
+
+            
+            if (digits.length === 10) {
+                el.value =
+                    "8-" +
+                    digits.substring(0, 3) + "-" +
+                    digits.substring(3, 6) + "-" +
+                    digits.substring(6, 8) + "-" +
+                    digits.substring(8, 10);
+            } else {
+                el.value = digits ? "8-" + digits : "";
+            }
+        },
+
+        formatPostal(prefix) {
+            const el = document.querySelector(`#${prefix}_postal_code`);
+            if (!el) return;
+            let digits = String(el.value || "").replace(/\D/g, "");
+            if (digits.length > 6) digits = digits.substring(0, 6);
+            el.value = digits;
+        },
+
+
         validateUser(prefix, isEdit = false) {
             this.clearModalError(prefix);
 
@@ -85,6 +118,23 @@ function adminPanel() {
                     this.showModalError(prefix, "Пароль должен быть минимум 8 символов");
                     return false;
                 }
+            }
+
+            const postal = document.querySelector(`#${prefix}_postal_code`)?.value.trim();
+            if (postal) {
+                if (!/^\d{6}$/.test(postal)) {
+                    this.showModalError(prefix, "Почтовый индекс должен содержать 6 цифр");
+                    return false;
+                }
+            }
+
+            
+            const phoneEl = document.querySelector(`#${prefix}_phone`);
+            const phoneVal = (phoneEl?.value || "").replace(/\D/g, "");
+
+            if (phoneVal.length > 0 && phoneVal.length < 10) {
+                this.showModalError(prefix, "Введите корректный номер телефона или оставьте поле пустым");
+                return false;
             }
 
             return true;
@@ -309,13 +359,21 @@ function adminPanel() {
                 this.showToast("Пользователь создан");
 
             } catch (err) {
-                const data = err?.data || {};
+                const data = err?.data || err?.response?.data || {};
+                const msg = (err?.message || "").toLowerCase();
 
-                if (data?.email?.message) {
+                const emailExists = !!(
+                    data?.email?.message ||
+                    (typeof data === 'string' && /email.*exist|already.*exists|duplicate/i.test(data)) ||
+                    /email.*exist|already.*exists|duplicate/i.test(msg) ||
+                    (data && Object.values(data).some(v => String(v).toLowerCase().includes('email') && String(v).toLowerCase().includes('exist')))
+                );
+
+                if (emailExists) {
                     return this.showModalError("create", "Пользователь с такой почтой уже существует");
                 }
 
-                if (data?.password?.message) {
+                if (data?.password?.message || /password.*length|password.*8/i.test(msg)) {
                     return this.showModalError("create", "Пароль должен быть минимум 8 символов");
                 }
 
@@ -350,12 +408,8 @@ function adminPanel() {
                 this.showToast("Пользователь обновлён");
 
             } catch (err) {
-                const data = err?.data || {};
-
-                if (data?.email?.message) {
-                    return this.showModalError("edit", "Пользователь с такой почтой уже существует");
-                }
-
+                const data = err?.data || err?.response?.data || {};
+                console.error('Update user error:', err);
                 this.showModalError("edit", "Ошибка при обновлении пользователя");
             }
         },

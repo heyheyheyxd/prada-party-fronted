@@ -33,6 +33,28 @@ function ordersPanel() {
             window.ordersPanelInstance = this;
         },
 
+        async getNextOrderNumber() {
+            const pb = new PocketBase("https://prada-party.onrender.com");
+            
+            try {
+                
+                const result = await pb.collection("orders").getList(1, 1, {
+                    sort: "-order_number"
+                });
+                
+                if (result.items && result.items.length > 0) {
+                    const maxNumber = result.items[0].order_number;
+                    return String(Number(maxNumber) + 1);
+                }
+                
+                
+                return "1";
+            } catch (err) {
+                console.error("Error fetching max order number:", err);
+                return "1";
+            }
+        },
+
         showToast(message) {
             const container = document.getElementById("toast-container");
             if (!container) return;
@@ -80,11 +102,36 @@ function ordersPanel() {
                 expand: "user"
             });
 
+            // обновление статуса
+            this.orders = this.orders.map(order => {
+                const newStatus = this.updateOrderStatus(order);
+                if (newStatus !== order.status) {
+                    pb.collection("orders").update(order.id, { status: newStatus });
+                    order.status = newStatus;
+                }
+                return order;
+            });
+
             this.tableLoaded = true;
             this.renderOrdersTable(this.orders);
         },
 
-        
+        updateOrderStatus(order) {
+            const now = new Date();
+
+            if (order.created_at) {
+                const created = new Date(order.created_at);
+                if ((now - created) / 60000 < 1) return "Создан";
+            }
+
+            if (order.delivery_date) {
+                const delivery = new Date(order.delivery_date);
+                if (now < delivery) return "В пути";
+                if (now >= delivery) return "Доставлен";
+            }
+
+            return order.status;
+        },
 
         getProductByBrandTitle(brand, title) {
             return this.productsMeta.find(p => p.brand === brand && p.title === title) || null;
@@ -113,7 +160,7 @@ function ordersPanel() {
             return Array.isArray(p?.sizes) && p.sizes.length > 0;
         },
 
-        // FORMATING
+        
 
         formatItems(items) {
             if (!Array.isArray(items)) return "";
@@ -463,10 +510,14 @@ function ordersPanel() {
 
         // CREATE
 
-        openCreate() {
+        async openCreate() {
+            const number = await this.getNextOrderNumber();
+            
             document.querySelector("#create_error").style.display = "none";
             document.querySelector("#create_items_block").innerHTML = "";
             document.querySelector("#create_total_price").value = "";
+            document.querySelector("#create_order_number").value = number;
+            document.querySelector("#create_order_number").readOnly = true;
 
             if (this.brandsList.length) this.addCreateItemRow();
 
@@ -526,6 +577,7 @@ function ordersPanel() {
             document.querySelector("#edit_user").value = o.user ?? "";
             document.querySelector("#edit_total_price").value = o.total_price ?? "";
             document.querySelector("#edit_order_number").value = o.order_number ?? "";
+            document.querySelector("#edit_order_number").readOnly = true;
             document.querySelector("#edit_status").value = o.status ?? "";
             document.querySelector("#edit_delivery_date").value = this.formatDate(o.delivery_date);
 
